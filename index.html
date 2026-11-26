@@ -1,0 +1,1952 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>سامانه لیگ بسکتبال سمپاد ۱ بابل</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23EA580C' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='9'/%3E%3Cpath d='M3 12h18M12 3v18M5.6 5.6c3.6 3.6 3.6 9.2 0 12.8M18.4 5.6c-3.6 3.6-3.6 9.2 0 12.8'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* ===== Design tokens — تم بسکتبالی: سفید / نارنجی / مشکی ===== */
+:root{
+  --background:#ffffff; --foreground:#0a0a0a;
+  --card:#ffffff; --card-fg:#0a0a0a;
+  --popover:#ffffff; --popover-fg:#0a0a0a;
+  --primary:#EA580C; --primary-fg:#fffaf5;
+  --secondary:#f5f5f5; --secondary-fg:#171717;
+  --muted:#f5f5f5; --muted-fg:#737373;
+  --accent:#f5f5f5; --accent-fg:#171717;
+  --destructive:#dc2626; --destructive-fg:#fafafa;
+  --border:#e5e5e5; --input:#e5e5e5; --ring:#F97316;
+  --radius:10px;
+  --shadow-sm:0 1px 2px 0 rgb(0 0 0 / .05);
+  --shadow-md:0 4px 6px -1px rgb(0 0 0 / .1), 0 2px 4px -2px rgb(0 0 0 / .1);
+  --shadow-lg:0 10px 15px -3px rgb(0 0 0 / .1), 0 4px 6px -4px rgb(0 0 0 / .1);
+  --shell-bg:linear-gradient(to bottom, rgba(255 247 237 / .7) 0%, #ffffff 46%, #ffffff 100%);
+  --header-bg:rgba(255,255,255,.85);
+  --white:#ffffff;
+  --dark:#171717;
+  --soft-20:rgb(245 245 245 / .2); --soft-30:rgb(245 245 245 / .3);
+  --soft-40:rgb(245 245 245 / .4); --soft-50:rgb(245 245 245 / .5);
+  --soft-60:rgb(245 245 245 / .6);
+  --bghead-solid:rgb(245 245 245 / .95);
+  --row-hover:rgb(245 245 245 / .5);
+  --row-first-bg:rgb(255 247 237 / .85);
+  --primary-soft:rgb(234 88 12 / .1);
+  --primary-strong:rgb(234 88 12 / .92);
+  --destructive-strong:rgb(220 38 38 / .9);
+  --error-soft:rgb(220 38 38 / .1);
+  --error-soft-2:rgb(220 38 38 / .08);
+  --focus-soft:rgb(249 115 22 / .5);
+  --scroll-thumb:rgb(234 88 12 / .55);
+  --scroll-thumb-hover:rgb(234 88 12 / .8);
+  --bar-grad:linear-gradient(to top,#EA580C,#FB923C);
+  --faint:rgb(115 115 115 / .4);
+  --badge-orange-bd:rgb(234 88 12 / .4); --badge-orange-fg:#C2410C;
+  --badge-sky-bd:rgb(14 165 233 / .4); --badge-sky-fg:#0369a1;
+  --rank-top-bg:#FFEDD5; --rank-top-fg:#9A3412;
+  --aoq-bg:#fef3c7; --aoq-fg:#92400e;
+  --warn-bg:rgb(255 251 235 / .7); --warn-bd:rgb(245 158 11 / .5);
+  --amber-note-bg:rgb(254 243 199); --amber-note-bd:rgb(217 119 6);
+  --overlay:rgba(0,0,0,.5);
+  --ticker-bg:#171717;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;border:0 solid var(--border)}
+html{scroll-behavior:smooth;color-scheme:light}
+body{font-family:"Vazirmatn",Tahoma,Arial,sans-serif;background:var(--background);color:var(--foreground);
+  -webkit-font-smoothing:antialiased;line-height:1.5;min-height:100vh}
+button{font:inherit;color:inherit;background:none;cursor:pointer}
+input,textarea,select{font:inherit;color:inherit}
+a{color:inherit;text-decoration:none}
+.tabular-fa{font-variant-numeric:tabular-nums}
+::-webkit-scrollbar{width:8px;height:8px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--scroll-thumb);border-radius:8px}
+::-webkit-scrollbar-thumb:hover{background:var(--scroll-thumb-hover)}
+:focus-visible{outline:2px solid var(--focus-soft);outline-offset:1px}
+[hidden]{display:none !important}
+.ltr{direction:ltr;unicode-bidi:isolate;display:inline-block}
+/* ===== App shell ===== */
+.shell{display:flex;min-height:100vh;flex-direction:column;background:var(--shell-bg)}
+.app-header{position:sticky;top:0;z-index:40;border-bottom:1px solid var(--border);
+  background:var(--header-bg);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+.header-inner{margin-inline:auto;width:100%;max-width:80rem;display:flex;flex-wrap:wrap;align-items:center;
+  justify-content:space-between;gap:.75rem;padding:.75rem 1rem}
+.header-brand{display:flex;align-items:center;gap:.75rem}
+.header-logo{display:flex;height:2.75rem;width:2.75rem;align-items:center;justify-content:center;
+  border-radius:1rem;background:var(--dark);color:var(--primary);box-shadow:var(--shadow-sm);flex:none;
+  box-shadow:0 2px 8px rgb(234 88 12 / .25), var(--shadow-sm)}
+.header-logo svg{width:1.5rem;height:1.5rem}
+.header-title{font-size:1.25rem;font-weight:800;line-height:1.25}
+.header-sub{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem;font-size:.75rem;color:var(--muted-fg)}
+.header-actions{display:flex;align-items:center;gap:.5rem}
+.app-main{margin-inline:auto;width:100%;max-width:80rem;flex:1;padding:1.5rem 1rem}
+.app-footer{margin-top:auto;border-top:1px solid var(--dark);background:var(--dark);color:#a3a3a3;
+  padding:1.25rem 0;padding-bottom:max(1.25rem,env(safe-area-inset-bottom))}
+.footer-inner{margin-inline:auto;width:100%;max-width:80rem;padding:0 1rem;text-align:center;
+  font-size:.75rem;display:flex;flex-direction:column;gap:.35rem}
+.footer-inner b{color:#FDBA74}
+/* ===== Ticker (مشکی / نارنجی) ===== */
+.ticker{background:var(--ticker-bg);color:#fff;height:2.25rem;display:flex;align-items:stretch;overflow:hidden}
+.tk-label{display:flex;align-items:center;gap:.5rem;padding:0 .9rem;flex:none;background:var(--primary);
+  font-weight:700;font-size:.75rem}
+.tk-label::before{content:'';height:.45rem;width:.45rem;border-radius:999px;background:#fff;animation:pulse 1.2s infinite}
+.tk-view{flex:1;overflow:hidden;display:flex;align-items:center}
+.tk-track{display:flex;width:max-content;animation:tkscroll var(--tks,38s) linear infinite}
+.tk-view:hover .tk-track{animation-play-state:paused}
+@keyframes tkscroll{from{transform:translateX(0)}to{transform:translateX(50%)}}
+.tk-item{display:inline-flex;align-items:center;gap:.5rem;padding:0 1.5rem;font-size:.8125rem;white-space:nowrap;opacity:.95}
+.tk-item b{color:#FDBA74;font-weight:700}
+.tk-dot{height:.4rem;width:.4rem;border-radius:999px;flex:none;background:#fff;opacity:.6}
+.tk-dot.g{background:#fbbf24}.tk-dot.e{background:#FB923C}
+.tk-clock{display:flex;align-items:center;padding:0 .9rem;flex:none;font-size:.8125rem;color:#FDBA74;border-inline-start:1px solid rgb(255 255 255 / .15)}
+/* ===== Buttons ===== */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:.5rem;white-space:nowrap;border-radius:calc(var(--radius) - 2px);
+  font-size:.875rem;font-weight:500;transition:all .15s;height:2.25rem;padding:.25rem 1rem;box-shadow:var(--shadow-sm);flex:none}
+.btn svg{width:1rem;height:1rem;flex:none;pointer-events:none}
+.btn:disabled{pointer-events:none;opacity:.5}
+.btn-default{background:var(--primary);color:var(--primary-fg)}
+.btn-default:hover{background:var(--primary-strong)}
+.btn-outline{border:1px solid var(--border);background:var(--background)}
+.btn-outline:hover{background:var(--accent)}
+.btn-ghost{box-shadow:none}
+.btn-ghost:hover{background:var(--accent)}
+.btn-destructive{background:var(--destructive);color:var(--destructive-fg)}
+.btn-destructive:hover{background:var(--destructive-strong)}
+.btn-destructive-o{border:1px solid var(--border);background:var(--background);color:var(--destructive)}
+.btn-destructive-o:hover{background:var(--error-soft-2)}
+.btn-sm{height:2rem;padding:.25rem .75rem;font-size:.8125rem;gap:.375rem}
+.btn-icon{height:2rem;width:2rem;padding:0;border-radius:calc(var(--radius) - 2px)}
+.btn-admin{height:1.6rem;width:1.6rem;padding:0;opacity:.35;border-radius:calc(var(--radius) - 4px)}
+.btn-admin:hover{opacity:1;background:var(--accent)}
+.btn-admin.authed{opacity:.9;color:var(--primary)}
+.btn-xs{height:2rem;padding:.25rem .5rem;font-size:.75rem}
+.spin{animation:spin 1s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+@keyframes pulse{50%{opacity:.5}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes zoomIn{from{opacity:0;transform:translate(-50%,-50%) scale(.96)}to{opacity:1;transform:translate(-50%,-50%) scale(1)}}
+@keyframes slideUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+/* ===== Cards ===== */
+.card{border-radius:calc(var(--radius) + 4px);border:1px solid var(--border);background:var(--card);
+  color:var(--card-fg);box-shadow:var(--shadow-sm)}
+.card-header{padding:1.5rem;display:flex;flex-direction:column;gap:.375rem}
+.card-header.row{flex-direction:row;align-items:flex-start;justify-content:space-between;gap:1rem}
+.card-head-txt{display:flex;flex-direction:column;gap:.375rem}
+.card-title{font-weight:600;font-size:1.125rem;line-height:1.3;display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.card-title svg{width:1.25rem;height:1.25rem;color:var(--primary)}
+.card-desc{font-size:.875rem;color:var(--muted-fg)}
+.card-desc.xs{font-size:.75rem}
+.card-content{padding:1.5rem}
+.card-content.pt0{padding-top:0}
+.card.h-fit{height:fit-content}
+/* ===== Badges ===== */
+.badge{display:inline-flex;align-items:center;gap:.25rem;border-radius:calc(var(--radius) - 4px);padding:.125rem .5rem;
+  font-size:.75rem;font-weight:600;width:fit-content;white-space:nowrap;transition:all .15s}
+.badge svg{width:.75rem;height:.75rem}
+.badge-default{background:var(--primary);color:var(--primary-fg);border:1px solid transparent}
+.badge-secondary{background:var(--secondary);color:var(--secondary-fg);border:1px solid transparent}
+.badge-outline{border:1px solid var(--border);color:var(--foreground);background:transparent}
+.badge-admin{border:1px solid var(--badge-orange-bd);color:var(--badge-orange-fg)}
+.badge-emerald{border:1px solid var(--badge-orange-bd);color:var(--badge-orange-fg)}
+.badge-sky{border:1px solid var(--badge-sky-bd);color:var(--badge-sky-fg)}
+.badge-amber{background:rgb(245 158 11 / .9);color:#fff;border:1px solid transparent}
+.badge-rose{border:1px solid rgb(225 29 72 / .4);color:#e11d48}
+.badge-aoq{background:var(--aoq-bg);color:var(--aoq-fg);border-radius:999px;font-size:10px;font-weight:700;padding:.125rem .5rem}
+/* ===== Tabs ===== */
+.tabs-list{background:var(--dark);color:#d4d4d4;display:flex;width:100%;flex-wrap:wrap;justify-content:center;
+  align-items:center;border-radius:calc(var(--radius) - 2px);padding:.25rem;min-height:2.25rem;text-align:center;margin-bottom:1rem}
+.tabs-trigger{display:inline-flex;align-items:center;justify-content:center;gap:.375rem;white-space:nowrap;border-radius:calc(var(--radius) - 4px);
+  padding:.25rem .625rem;font-size:.875rem;font-weight:500;transition:all .15s;color:#a3a3a3;min-height:1.75rem}
+.tabs-trigger:hover{color:#fff}
+.tabs-trigger.active{background:var(--primary);color:#fff;box-shadow:var(--shadow-sm)}
+.tabs-trigger svg{width:1rem;height:1rem}
+.sub-tabs{display:flex;flex-wrap:wrap;gap:.375rem;background:var(--muted);border-radius:calc(var(--radius) + 2px);
+  padding:.3rem;margin-bottom:1.125rem}
+.sub-tab{display:inline-flex;align-items:center;gap:.4rem;border:0;background:none;cursor:pointer;
+  border-radius:calc(var(--radius) - 2px);padding:.45rem .8rem;font-size:.8125rem;font-weight:600;
+  color:var(--muted-fg);transition:background .15s,color .15s;white-space:nowrap}
+.sub-tab svg{width:1rem;height:1rem;flex:none}
+.sub-tab:hover{color:var(--foreground)}
+.sub-tab.active{background:var(--card);color:var(--card-fg);font-weight:700;box-shadow:var(--shadow-sm)}
+/* ===== Tables ===== */
+.tblwrap{overflow-x:auto;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border)}
+table.data{width:100%;border-collapse:collapse;font-size:.875rem}
+table.data thead tr{border-bottom:1px solid var(--border)}
+table.data thead tr.bghead{background:var(--soft-60)}
+table.data th{height:2.5rem;padding:0 .5rem;vertical-align:middle;font-weight:500;color:var(--muted-fg);white-space:nowrap;text-align:right}
+table.data th.center{text-align:center}
+table.data td{padding:.5rem;vertical-align:middle;white-space:nowrap;border-top:1px solid var(--border);text-align:right}
+table.data tbody tr{border-bottom:1px solid var(--border);transition:background .15s}
+table.data tbody tr:last-child{border-bottom:0}
+table.data tbody tr:hover{background:var(--row-hover)}
+table.data tbody tr.row-first{background:var(--row-first-bg)}
+table.data td.center{text-align:center}
+.min-w-760{min-width:760px}
+.rank-circle{display:inline-flex;height:1.75rem;width:1.75rem;align-items:center;justify-content:center;border-radius:999px;font-size:.75rem;font-weight:700}
+.rank-1{background:#fbbf24;color:#451a03}
+.rank-2{background:#d4d4d4;color:#262626}
+.rank-3{background:#fdba74;color:#7c2d12}
+.rank-top{background:var(--rank-top-bg);color:var(--rank-top-fg)}
+.rank-rest{background:var(--muted);color:var(--muted-fg)}
+.pts-pill{display:inline-flex;height:1.75rem;min-width:2rem;align-items:center;justify-content:center;border-radius:calc(var(--radius) - 4px);
+  background:var(--primary);padding:0 .5rem;font-weight:800;color:var(--primary-fg)}
+.form-badges{display:flex;flex-direction:row-reverse;align-items:center;gap:.25rem;direction:ltr;justify-content:center}
+.form-pill{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-weight:700;color:#fff;height:1.25rem;width:1.25rem;font-size:10px}
+.form-pill.W{background:var(--primary)}
+.form-pill.L{background:#525252}
+.text-emerald{color:var(--primary)}
+.text-rose{color:#e11d48}
+.text-muted{color:var(--muted-fg)}
+.legend{margin-top:.75rem;display:flex;flex-wrap:wrap;align-items:center;column-gap:1.25rem;row-gap:.25rem;font-size:.75rem;color:var(--muted-fg)}
+.legend .dot{display:inline-block;height:.75rem;width:.75rem;border-radius:999px;flex:none}
+.team-cell{display:flex;align-items:center;gap:.5rem}
+.team-cell .tname{font-weight:600}
+/* ===== Team logo ===== */
+.team-logo{display:inline-flex;align-items:center;justify-content:center;border-radius:999px;font-weight:700;color:#fff;
+  user-select:none;flex:none;overflow:hidden;box-shadow:inset 0 0 0 1.5px rgb(255 255 255 / .35)}
+/* ===== Forms ===== */
+.field{display:flex;flex-direction:column;gap:.5rem}
+.label{font-size:.875rem;font-weight:500}
+.input{display:flex;height:2.25rem;width:100%;border-radius:calc(var(--radius) - 2px);border:1px solid var(--input);
+  background:transparent;padding:.25rem .75rem;font-size:.875rem;box-shadow:var(--shadow-sm);transition:border-color .15s,box-shadow .15s;outline:none}
+.input::placeholder{color:var(--muted-fg)}
+.input:focus{border-color:var(--ring);box-shadow:0 0 0 2px var(--focus-soft)}
+.input.ltr{direction:ltr;text-align:left}
+.input.score{width:4rem;text-align:center;font-size:1.25rem;font-weight:800}
+.input.sm-n{width:4.5rem;text-align:center}
+textarea.input{min-height:5rem;padding:.5rem .75rem}
+select.input{appearance:none;-webkit-appearance:none;cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23737373' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat:no-repeat;background-position:left .5rem center;background-size:1rem;padding-left:2rem}
+.form-grid{display:grid;grid-template-columns:repeat(1,minmax(0,1fr));gap:.75rem}
+@media(min-width:640px){.form-grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}.form-grid.cols-3{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.form-grid.cols-4{grid-template-columns:repeat(2,minmax(0,1fr))}
+@media(min-width:768px){.form-grid.cols-4{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.form-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.hint{font-size:.75rem;color:var(--muted-fg)}
+.ck-label{display:flex;cursor:pointer;align-items:center;gap:.375rem;font-size:.8125rem}
+.ck-label input{width:1rem;height:1rem;accent-color:var(--primary);cursor:pointer}
+/* ===== Empty ===== */
+.empty{padding:2.5rem 0;text-align:center;font-size:.875rem;color:var(--muted-fg)}
+.empty .empty-ic{margin-inline:auto;margin-bottom:.75rem;height:2.5rem;width:2.5rem;opacity:.3;color:var(--foreground)}
+.empty .empty-ic svg{width:2.5rem;height:2.5rem}
+.empty.dashed{border:1px dashed var(--border);border-radius:calc(var(--radius) + 4px)}
+/* ===== Match rows ===== */
+.match-btn{width:100%;border-radius:calc(var(--radius) + 4px);border:1px solid var(--border);background:var(--card);
+  padding:.75rem;text-align:right;transition:background .15s;display:block}
+@media(min-width:640px){.match-btn{padding:1rem}}
+.match-btn:hover{background:var(--soft-60)}
+.match-main{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.match-side{display:flex;min-width:0;flex:1;align-items:center;gap:.5rem}
+.match-side.home{justify-content:flex-end}
+.match-side .tname{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.match-center{display:flex;width:7.5rem;flex-direction:column;align-items:center;gap:.25rem;flex:none}
+.vs-chip{border-radius:calc(var(--radius) - 4px);background:var(--muted);padding:.125rem .5rem;font-size:.75rem;font-weight:700;color:var(--muted-fg);direction:ltr;unicode-bidi:isolate}
+.score-chip{border-radius:calc(var(--radius) - 2px);background:var(--primary);padding:.25rem .75rem;font-size:1rem;font-weight:800;
+  color:var(--primary-fg);direction:ltr;unicode-bidi:isolate}
+.status-sub{font-size:11px;color:var(--muted-fg)}
+.match-meta{margin-top:.5rem;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;column-gap:1rem;row-gap:.25rem;
+  font-size:.75rem;color:var(--muted-fg)}
+.match-meta>span{display:inline-flex;align-items:center;gap:.25rem}
+.match-meta svg{width:.875rem;height:.875rem}
+.group-round-title{font-size:.875rem;font-weight:700;color:var(--muted-fg);display:flex;align-items:center;gap:.5rem;flex-wrap:wrap}
+.stack{display:flex;flex-direction:column;gap:.5rem}
+.stack-2{display:flex;flex-direction:column;gap:1rem}
+.badges-row{display:flex;flex-wrap:wrap;gap:.5rem}
+/* ===== Hero match / countdown ===== */
+.hero-match{display:flex;align-items:center;justify-content:space-between;gap:1rem;flex-wrap:wrap;
+  border-radius:calc(var(--radius) + 4px);border:1px solid var(--border);background:var(--soft-20);padding:1.25rem}
+.hm-side{display:flex;flex:1;min-width:8rem;flex-direction:column;align-items:center;gap:.5rem;text-align:center}
+.hm-side .nm{font-weight:800;font-size:1rem}
+.hm-side .rec{font-size:.7rem;color:var(--muted-fg)}
+.hm-mid{display:flex;flex-direction:column;align-items:center;gap:.5rem}
+.hm-vs{display:inline-flex;height:3rem;width:3rem;align-items:center;justify-content:center;border-radius:999px;
+  background:var(--primary);color:var(--primary-fg);font-weight:800;font-size:1rem;box-shadow:0 4px 12px rgb(234 88 12 / .35)}
+.cd-grid{display:flex;gap:.5rem;direction:ltr}
+.cd-cell{display:flex;flex-direction:column;align-items:center;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border);
+  background:var(--card);min-width:3.5rem;padding:.375rem .25rem}
+.cd-cell b{font-size:1.25rem;font-weight:800;line-height:1.4;color:var(--primary)}
+.cd-cell span{font-size:10px;color:var(--muted-fg)}
+/* ===== Tiles ===== */
+.tiles{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.5rem}
+@media(min-width:640px){.tiles{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.tile{display:flex;align-items:center;gap:.625rem;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border);background:var(--soft-30);padding:.625rem}
+.tile .tile-ic{display:flex;height:2rem;width:2rem;flex:none;align-items:center;justify-content:center;border-radius:calc(var(--radius) - 4px);
+  background:var(--primary-soft);color:var(--primary)}
+.tile .tile-ic svg{width:1rem;height:1rem}
+.tile .tile-val{font-size:1.125rem;font-weight:800;line-height:1.5rem}
+.tile .tile-label{font-size:11px;line-height:1rem;color:var(--muted-fg)}
+/* ===== Podium ===== */
+.pod-grid{display:grid;gap:.75rem;grid-template-columns:1fr}
+@media(min-width:640px){.pod-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.pod-card{display:flex;flex-direction:column;align-items:center;gap:.375rem;border-radius:calc(var(--radius) + 4px);
+  border:1px solid var(--border);background:var(--card);padding:1.25rem 1rem;text-align:center;position:relative;transition:box-shadow .15s}
+.pod-card:hover{box-shadow:var(--shadow-md)}
+.pod-card.first{border-color:rgb(251 191 36 / .6);background:rgb(254 252 232 / .6)}
+.pod-card .pct{font-size:1.75rem;font-weight:800;color:var(--primary)}
+.pod-card .rec{font-size:.75rem;color:var(--muted-fg)}
+.pod-rank{position:absolute;top:-.75rem;inset-inline-start:50%;transform:translateX(50%);height:1.75rem;width:1.75rem;border-radius:999px;
+  display:inline-flex;align-items:center;justify-content:center;background:var(--dark);color:#fff;font-size:.75rem;font-weight:800;border:2px solid var(--card)}
+.pod-card.first .pod-rank{background:#fbbf24;color:#451a03}
+/* ===== Dialogs ===== */
+.dialog-overlay{position:fixed;inset:0;z-index:50;background:var(--overlay);animation:fadeIn .15s}
+.dialog{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:51;display:grid;width:100%;
+  max-width:calc(100% - 2rem);gap:1rem;border-radius:calc(var(--radius) + 2px);border:1px solid var(--border);
+  background:var(--background);padding:1.5rem;box-shadow:var(--shadow-lg);animation:zoomIn .18s ease-out}
+@media(min-width:640px){.dialog{max-width:32rem}}
+.dialog.sm{max-width:24rem}
+.dialog.lg{max-width:42rem}
+.dialog.scroll{max-height:90vh;overflow-y:auto}
+.dialog-header{display:flex;flex-direction:column;gap:.375rem;text-align:right}
+.dialog-title{font-size:1.125rem;font-weight:600;line-height:1.3;display:flex;align-items:center;gap:.5rem}
+.dialog-title svg{width:1.25rem;height:1.25rem;color:var(--primary)}
+.dialog-desc{font-size:.875rem;color:var(--muted-fg)}
+.dialog-footer{display:flex;flex-direction:column-reverse;gap:.5rem}
+@media(min-width:640px){.dialog-footer{flex-direction:row;justify-content:flex-end}}
+.dialog-footer.wrap{flex-wrap:wrap}
+.dialog-close{position:absolute;top:1rem;inset-inline-end:1rem;height:2rem;width:2rem;border-radius:calc(var(--radius) - 4px);
+  display:inline-flex;align-items:center;justify-content:center;opacity:.7;transition:opacity .15s}
+.dialog-close:hover{opacity:1;background:var(--accent)}
+.dialog-close svg{width:1rem;height:1rem}
+.error-box{border-radius:calc(var(--radius) - 4px);background:var(--error-soft);padding:.5rem .75rem;font-size:.875rem;color:var(--destructive)}
+.warn-box{border-radius:calc(var(--radius) - 2px);border:1px solid var(--warn-bd);background:var(--warn-bg);padding:1rem;display:flex;flex-direction:column;gap:.75rem}
+.amber-note{border-radius:calc(var(--radius) - 2px);border:1px solid var(--amber-note-bd);background:var(--amber-note-bg);padding:.625rem .75rem;display:flex;align-items:center;gap:.5rem;font-size:.8125rem}
+.amber-note svg{width:1rem;height:1rem;flex:none;color:#b45309}
+.sync-box{border-radius:calc(var(--radius) - 2px);border:1px dashed var(--border);background:var(--soft-20);padding:.75rem 1rem;font-size:.8125rem;line-height:1.9}
+.sync-box b{color:var(--badge-orange-fg)}
+.sep{height:1px;width:100%;background:var(--border);flex:none}
+.rowline{display:flex;align-items:flex-start;gap:.5rem;font-size:.875rem}
+.rowline svg{width:1rem;height:1rem;color:var(--muted-fg);margin-top:.125rem;flex:none}
+.link-row{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.link-row .input{flex:1;min-width:12rem;font-size:.75rem}
+/* ===== List rows ===== */
+.lrow{display:flex;flex-wrap:wrap;align-items:center;gap:.625rem;border-bottom:1px solid var(--border);padding:.5rem 0;font-size:.875rem}
+.lrow:last-child{border-bottom:0}
+.lrow .grow{flex:1;min-width:9rem}
+.lrow .sub{font-size:.7rem;color:var(--muted-fg)}
+.acts{display:flex;gap:.25rem;margin-inline-start:auto}
+.mini-h{font-weight:700}.mini-h .cnt{font-weight:400;color:var(--muted-fg)}
+/* ===== Stat editor ===== */
+.stat-grid{display:grid;gap:1rem;grid-template-columns:1fr}
+@media(min-width:768px){.stat-grid{grid-template-columns:1fr 1fr}}
+.st-line{display:grid;grid-template-columns:1fr 4rem 4rem 4rem;gap:.375rem;align-items:center;margin-bottom:.375rem}
+.st-line>span{font-size:.8125rem;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.st-head{font-size:10px;font-weight:700;color:var(--muted-fg);text-align:center}
+.scorebox{display:flex;align-items:center;justify-content:center;gap:.75rem;flex-wrap:wrap;margin-bottom:1rem}
+.scorebox .input.score{width:5rem}
+/* ===== Admin shell ===== */
+.admin{position:fixed;inset:0;z-index:60;background:var(--background);display:flex;flex-direction:column;animation:fadeIn .15s}
+.admin-top{background:var(--dark);color:#fff;display:flex;align-items:center;gap:.75rem;padding:.6rem 1rem;flex:none;flex-wrap:wrap}
+.admin-top .ttl{font-weight:800;font-size:.9375rem}
+.admin-top .sp{flex:1}
+.admin-body{flex:1;display:flex;overflow:hidden}
+.admin-side{width:14rem;flex:none;border-inline-end:1px solid var(--border);background:var(--card);padding:.75rem;display:flex;flex-direction:column;gap:.25rem;overflow-y:auto}
+.admin-tab{display:flex;align-items:center;gap:.625rem;padding:.55rem .75rem;border-radius:calc(var(--radius) - 2px);
+  font-size:.8125rem;font-weight:600;color:var(--muted-fg);transition:all .15s;text-align:right;width:100%}
+.admin-tab svg{width:1.1rem;height:1.1rem;flex:none}
+.admin-tab:hover{background:var(--accent);color:var(--foreground)}
+.admin-tab.active{background:var(--primary-soft);color:var(--badge-orange-fg)}
+.admin-tab .cnt{margin-inline-start:auto;font-size:.65rem;background:var(--primary-soft);color:var(--primary);padding:.05rem .4rem;border-radius:999px;font-weight:800}
+.admin-main{flex:1;overflow-y:auto;padding:1.25rem 1.5rem 3rem}
+.ad-h{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:1rem}
+.ad-h h2{font-size:1.15rem;font-weight:800}
+.ad-h p{font-size:.75rem;color:var(--muted-fg)}
+.st-badge{display:inline-flex;align-items:center;gap:.3rem;border-radius:999px;padding:.1rem .6rem;font-size:.7rem;font-weight:700}
+.st-live{background:var(--rank-top-bg);color:var(--rank-top-fg)}
+.st-err{background:var(--error-soft);color:var(--destructive)}
+.st-wait{background:var(--aoq-bg);color:var(--aoq-fg)}
+.gm-card{border:1px solid var(--border);border-radius:calc(var(--radius) + 2px);padding:.75rem 1rem;margin-bottom:.625rem;background:var(--card)}
+.gm-card.done{border-inline-start:3px solid var(--primary)}
+.gm-card.next{border-inline-start:3px solid var(--dark)}
+.gm-card.wait{border-inline-start:3px solid #f59e0b}
+.gm-head{display:flex;align-items:center;gap:.5rem;flex-wrap:wrap;font-size:.875rem}
+.gm-head .grow{flex:1}
+.gm-score{font-weight:800;font-size:1rem}
+/* ===== Chat ===== */
+.chat-wrap{display:flex;flex-direction:column;height:calc(100vh - 9.5rem);border:1px solid var(--border);
+  border-radius:calc(var(--radius) + 4px);overflow:hidden;background:var(--card)}
+.chat-head{display:flex;align-items:center;gap:.625rem;padding:.75rem 1rem;border-bottom:1px solid var(--border);background:var(--soft-20)}
+.chat-head .av{display:flex;height:2.5rem;width:2.5rem;align-items:center;justify-content:center;border-radius:calc(var(--radius) - 2px);
+  background:var(--dark);color:var(--primary);flex:none}
+.chat-head .av svg{width:1.25rem;height:1.25rem}
+.chat-head .nm{font-weight:700;font-size:.875rem}
+.chat-head .on{font-size:.7rem;color:var(--muted-fg);display:flex;align-items:center;gap:.3rem}
+.chat-head .on::before{content:'';height:.4rem;width:.4rem;border-radius:999px;background:var(--primary)}
+.chat-head .sp{flex:1}
+.chat-body{flex:1;overflow-y:auto;padding:1.25rem;display:flex;flex-direction:column;gap:.75rem}
+.msg{max-width:85%;animation:slideUp .2s ease-out}
+.msg.ai{align-self:flex-start}
+.msg.user{align-self:flex-end}
+.msg .who{font-size:.65rem;color:var(--muted-fg);margin-bottom:.15rem;font-weight:600}
+.msg.user .who{text-align:left}
+.msg .bbl{padding:.6rem .9rem;border-radius:calc(var(--radius) + 2px);font-size:.8125rem;line-height:1.9;border:1px solid var(--border)}
+.msg.ai .bbl{background:var(--soft-30);border-start-start-radius:4px}
+.msg.user .bbl{background:var(--dark);color:#fafafa;border-start-end-radius:4px}
+.msg .bbl b{color:var(--badge-orange-fg)}
+.msg.user .bbl b{color:#FDBA74}
+.msg .bbl mini{font-size:.68rem;color:var(--muted-fg)}
+.msg-line{display:flex;align-items:center;gap:.4rem;padding:.15rem 0}
+.msg-line svg{width:.85rem;height:.85rem;flex:none;color:var(--primary)}
+.msg-line+.msg-line{border-top:1px dashed var(--border)}
+.msg-ok{color:var(--badge-orange-fg);font-weight:700}
+.typing{display:inline-flex;gap:.3rem;padding:.25rem 0}
+.typing i{height:.45rem;width:.45rem;border-radius:999px;background:var(--muted-fg);animation:pulse 1s infinite}
+.typing i:nth-child(2){animation-delay:.15s}.typing i:nth-child(3){animation-delay:.3s}
+.chat-chips{display:flex;gap:.375rem;flex-wrap:wrap;padding:.6rem 1rem;border-top:1px solid var(--border);background:var(--soft-20)}
+.chat-chips button{font-size:.7rem;font-weight:600;padding:.3rem .7rem;border-radius:999px;border:1px solid var(--border);
+  background:var(--card);transition:all .15s}
+.chat-chips button:hover{border-color:var(--primary);color:var(--primary)}
+.chat-in{display:flex;gap:.5rem;padding:.75rem;border-top:1px solid var(--border)}
+.chat-in textarea{flex:1;resize:none;border:1px solid var(--input);border-radius:calc(var(--radius) - 2px);padding:.5rem .75rem;
+  font-size:.8125rem;outline:none;height:3.25rem;max-height:8rem;background:var(--soft-20)}
+.chat-in textarea:focus{border-color:var(--ring)}
+.chat-send{height:3.25rem;width:3.25rem;border-radius:calc(var(--radius) - 2px);background:var(--primary);color:var(--primary-fg);
+  display:flex;align-items:center;justify-content:center;flex:none;transition:all .15s}
+.chat-send:hover{background:var(--primary-strong)}
+.chat-send svg{width:1.25rem;height:1.25rem;transform:scaleX(-1)}
+/* ===== Toast ===== */
+.toaster{position:fixed;bottom:0;right:0;z-index:100;display:flex;max-height:100vh;width:100%;flex-direction:column-reverse;padding:1rem}
+@media(min-width:640px){.toaster{max-width:420px}}
+.toast{pointer-events:auto;position:relative;display:flex;width:100%;align-items:flex-start;justify-content:space-between;
+  gap:.5rem;overflow:hidden;border-radius:calc(var(--radius) - 2px);border:1px solid var(--border);background:var(--white);padding:1rem;
+  padding-inline-start:1.5rem;box-shadow:var(--shadow-lg);animation:slideUp .2s ease-out;flex-direction:column}
+.toast.destructive{border-color:rgb(220 38 38 / .6);background:var(--destructive);color:#fafafa}
+.toast .t-title{font-size:.875rem;font-weight:600}
+.toast .t-x{position:absolute;inset-inline-start:.5rem;top:.5rem;opacity:.5}
+.toast .t-x:hover{opacity:1}
+.toast .t-x svg{width:1rem;height:1rem}
+/* ===== Leaderboard bar ===== */
+.pl-bar{height:.4rem;background:var(--muted);border-radius:999px;overflow:hidden;min-width:6rem}
+.pl-bar i{display:block;height:100%;background:var(--bar-grad);border-radius:999px;transition:width .8s cubic-bezier(.2,.8,.3,1)}
+/* ===== News ===== */
+.news-list{display:flex;flex-direction:column;gap:.5rem}
+.news-item{display:flex;align-items:flex-start;gap:.625rem;border:1px solid var(--border);border-radius:calc(var(--radius) - 2px);
+  padding:.75rem;background:var(--card);transition:background .15s}
+.news-item:hover{background:var(--soft-40)}
+.news-item .nic{display:flex;height:2rem;width:2rem;flex:none;align-items:center;justify-content:center;border-radius:calc(var(--radius) - 4px);
+  background:var(--primary-soft);color:var(--primary)}
+.news-item .nic svg{width:1rem;height:1rem}
+.news-item .nt{font-size:.8125rem;font-weight:600;line-height:1.8}
+.news-item .nd{font-size:.7rem;color:var(--muted-fg)}
+/* ===== misc ===== */
+.txt-center{text-align:center}
+.filterbar{display:flex;flex-wrap:wrap;align-items:center;gap:.5rem}
+.filterbar .input.w-sel{width:11rem}
+.counts-line{display:flex;flex-wrap:wrap;column-gap:1rem;row-gap:.25rem;font-size:.75rem;color:var(--muted-fg)}
+/* ===== Responsive ===== */
+@media(max-width:768px){
+  .header-title{font-size:1rem}
+  .admin-body{flex-direction:column}
+  .admin-side{width:100%;flex-direction:row;overflow-x:auto;border-inline-end:0;border-bottom:1px solid var(--border);padding:.5rem}
+  .admin-tab{white-space:nowrap;width:auto}
+  .admin-main{padding:1rem .75rem 2.5rem}
+  .chat-wrap{height:calc(100vh - 10.5rem)}
+  .tk-clock{display:none}
+  .match-center{width:6.5rem}
+}
+@media print{
+  .app-header,.ticker,.tabs-list,.toaster,.admin,.dialog,.dialog-overlay,.app-footer{display:none !important}
+  .shell{background:#fff}
+  section[data-page]{display:none !important}
+  section[data-page="standings"]{display:block !important}
+}
+</style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- ═══════ هدر ═══════ -->
+  <header class="app-header">
+    <div class="header-inner">
+      <div class="header-brand">
+        <div class="header-logo">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M5.6 5.6c3.6 3.6 3.6 9.2 0 12.8M18.4 5.6c-3.6 3.6-3.6 9.2 0 12.8"/>
+          </svg>
+        </div>
+        <div>
+          <div class="header-title">لیگ بسکتبال سمپاد ۱ بابل</div>
+          <div class="header-sub">
+            <span class="badge badge-admin">استعدادهای درخشان</span>
+            <span class="badge badge-outline" id="hdSeason">فصل تحصیلی ۱۴۰۵–۱۴۰۶</span>
+            <span class="badge badge-emerald" id="hdCloud" hidden>متصل و زنده</span>
+          </div>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button class="btn btn-icon btn-ghost" id="shareBtn" title="اشتراک‌گذاری"></button>
+        <button class="btn btn-icon btn-ghost" id="printBtn" title="چاپ جدول"></button>
+        <button class="btn btn-admin btn-ghost" id="adminTrigger" title="ورود مدیریت"></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ═══════ تیکر خبری ═══════ -->
+  <div class="ticker">
+    <div class="tk-label">اخبار لیگ</div>
+    <div class="tk-view"><div class="tk-track" id="tkTrack"></div></div>
+    <div class="tk-clock tabular-fa" id="tkClock">--:--:--</div>
+  </div>
+
+  <!-- ═══════ محتوا ═══════ -->
+  <main class="app-main">
+    <div class="tabs-list" id="mainTabs">
+      <button class="tabs-trigger active" data-tab="home"></button>
+      <button class="tabs-trigger" data-tab="standings"></button>
+      <button class="tabs-trigger" data-tab="results"></button>
+      <button class="tabs-trigger" data-tab="players"></button>
+      <button class="tabs-trigger" data-tab="teams"></button>
+      <button class="tabs-trigger" data-tab="schedule"></button>
+      <button class="tabs-trigger" data-tab="news"></button>
+    </div>
+
+    <section data-page="home" id="page-home"></section>
+    <section data-page="standings" id="page-standings" hidden></section>
+    <section data-page="results" id="page-results" hidden></section>
+    <section data-page="players" id="page-players" hidden></section>
+    <section data-page="teams" id="page-teams" hidden></section>
+    <section data-page="schedule" id="page-schedule" hidden></section>
+    <section data-page="news" id="page-news" hidden></section>
+  </main>
+
+  <!-- ═══════ فوتر ═══════ -->
+  <footer class="app-footer">
+    <div class="footer-inner">
+      <span>© فصل تحصیلی ۱۴۰۵–۱۴۰۶ — دبیرخانه تربیت بدنی مدرسه سمپاد ۱ بابل</span>
+      <span>آخرین به‌روزرسانی اطلاعات: <b id="footUpdated">—</b></span>
+    </div>
+  </footer>
+</div>
+
+<!-- ═══════ دیالوگ ورود مدیریت ═══════ -->
+<div class="dialog-overlay" id="loginOverlay" hidden></div>
+<div class="dialog sm" id="loginDialog" hidden>
+  <button class="dialog-close" id="loginClose"></button>
+  <div class="dialog-header">
+    <div class="dialog-title" id="loginTitle"></div>
+    <div class="dialog-desc">این بخش فقط برای مدیر رسمی لیگ است.</div>
+  </div>
+  <div class="error-box" id="loginErr" hidden>رمز عبور نادرست است؛ دوباره تلاش کنید.</div>
+  <form id="loginForm" style="display:grid;gap:1rem">
+    <div class="field">
+      <label class="label" for="pwInput">رمز عبور</label>
+      <input class="input ltr" type="password" id="pwInput" autocomplete="off" inputmode="numeric" style="text-align:center;letter-spacing:.4rem">
+    </div>
+    <div class="dialog-footer">
+      <button type="button" class="btn btn-outline" id="loginCancel">انصراف</button>
+      <button type="submit" class="btn btn-default" id="loginSubmit"></button>
+    </div>
+  </form>
+</div>
+
+<!-- ═══════ پنل مدیریت ═══════ -->
+<div class="admin" id="adminPanel" hidden>
+  <div class="admin-top">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#FB923C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="width:1.4rem;height:1.4rem">
+      <circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M5.6 5.6c3.6 3.6 3.6 9.2 0 12.8M18.4 5.6c-3.6 3.6-3.6 9.2 0 12.8"/>
+    </svg>
+    <span class="ttl">پنل مدیریت لیگ — سمپاد ۱ بابل</span>
+    <span id="adSaveChip" class="st-badge st-live">ذخیره خودکار</span>
+    <span class="sp"></span>
+    <button class="btn btn-sm btn-outline" data-act="view-site" id="viewSiteBtn"></button>
+    <button class="btn btn-sm btn-destructive-o" data-act="logout" id="logoutBtn" style="color:#fca5a5;border-color:rgb(252 165 165/.4);background:transparent"></button>
+  </div>
+  <div class="admin-body">
+    <aside class="admin-side" id="adSide"></aside>
+    <div class="admin-main" id="adminMain"></div>
+  </div>
+</div>
+
+<div class="toaster" id="toaster"></div>
+
+<script>
+'use strict';
+(function(){
+
+/* ═════════════ ۱) ابزارها ═════════════ */
+const CLOUD_CODE_DEFAULT = '';
+const FA_DIGITS='۰۱۲۳۴۵۶۷۸۹';
+function toFa(v){return String(v).replace(/\d/g,d=>FA_DIGITS[+d]);}
+function faNum(v,dec){const n=(dec!=null)?(+v).toFixed(dec):String(v);return toFa(n).replace('.','٫');}
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;');}
+let _uid=0;
+function uid(p){_uid++;return (p||'id')+'_'+Date.now().toString(36)+(_uid).toString(36)+Math.floor(Math.random()*999).toString(36);}
+function pad2(n){return String(n).padStart(2,'0');}
+function todayStr(d){const t=d||new Date();return t.getFullYear()+'-'+pad2(t.getMonth()+1)+'-'+pad2(t.getDate());}
+function addDays(date,n){const d=new Date(date);d.setDate(d.getDate()+n);return d;}
+function parseDate(s){const p=s.split('-').map(Number);return new Date(p[0],p[1]-1,p[2]);}
+function norm(s){return String(s).replace(/[۰-۹]/g,d=>FA_DIGITS.indexOf(d)).replace(/[٠-٩]/g,d=>'٠١٢٣٤٥٦٧٨٩'.indexOf(d)).replace(/ي/g,'ی').replace(/ك/g,'ک').replace(/[أإآ]/g,'ا').replace(/ۀ|ة/g,'ه').replace(/\u200c/g,' ').replace(/[\u064B-\u0652]/g,'').replace(/[−–—]/g,'-').replace(/：/g,':').replace(/\s+/g,' ').trim();}
+function isFaLetter(ch){return ch&&/[\u0600-\u06FF]/.test(ch);}
+function djb2(str){let h=5381;for(let i=0;i<str.length;i++){h=((h<<5)+h+str.charCodeAt(i))>>>0;}return h;}
+function copyText(txt,okMsg){
+  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(txt).then(()=>toast(okMsg||'در کلیپ‌بورد کپی شد')).catch(()=>copyFallback(txt,okMsg));}
+  else copyFallback(txt,okMsg);
+}
+function copyFallback(txt,okMsg){const ta=document.createElement('textarea');ta.value=txt;ta.style.position='fixed';ta.style.opacity='0';document.body.appendChild(ta);ta.select();try{document.execCommand('copy');toast(okMsg||'در کلیپ‌بورد کپی شد');}catch(e){toast('کپی خودکار ممکن نبود','destructive');}document.body.removeChild(ta);}
+function fetchT(url,opts,ms){opts=opts||{};if('AbortController' in window){const c=new AbortController();opts.signal=c.signal;const t=setTimeout(()=>c.abort(),ms||12000);return fetch(url,opts).finally(()=>clearTimeout(t));}return fetch(url,opts);}
+/* جلالی */
+const J_MONTHS=['فروردین','اردیبهشت','خرداد','تیر','مرداد','شهریور','مهر','آبان','آذر','دی','بهمن','اسفند'];
+const WEEKDAYS=['یکشنبه','دوشنبه','سه‌شنبه','چهارشنبه','پنجشنبه','جمعه','شنبه'];
+function toJalali(gy,gm,gd){const g_d_m=[0,31,59,90,120,151,181,212,243,273,304,334];let jy=(gy<=1600)?0:979;const y=gy-(gy<=1600?621:1600);const gy2=(gm>2)?y+1:y;let days=365*y+~~((gy2+3)/4)-~~((gy2+99)/100)+~~((gy2+399)/400)-80+gd+g_d_m[gm-1];jy+=33*~~(days/12053);days%=12053;jy+=4*~~(days/1461);days%=1461;if(days>365){jy+=~~((days-1)/365);days=(days-1)%365;}const jm=(days<186)?1+~~(days/31):7+~~((days-186)/30);const jd=1+((days<186)?(days%31):((days-186)%30));return{jy,jm,jd};}
+function toGregorian(jy,jm,jd){jy+=1595;let days=-355668+(365*jy)+~~(jy/33)*8+~~(((jy%33)+3)/4)+jd+((jm<7)?(jm-1)*31:((jm-7)*30+186));let gy=400*~~(days/146097);days%=146097;if(days>36524){gy+=100;days-=36524;if(days>=365)days--;}gy+=4*~~(days/1461);days%=1461;if(days>365){gy+=~~((days-1)/365);days=(days-1)%365;}let gd=days+1;const sal=[0,31,((gy%4===0&&gy%100!==0)||gy%400===0)?29:28,31,30,31,30,31,31,30,31,30,31];let gm;for(gm=0;gm<13;gm++){if(gd<=sal[gm])break;gd-=sal[gm];}return{gy,gm,gd};}
+function jOf(d){const dd=(typeof d==='string')?parseDate(d):d;return toJalali(dd.getFullYear(),dd.getMonth()+1,dd.getDate());}
+function fmtJalali(ds,wd){const d=parseDate(ds);const j=toJalali(d.getFullYear(),d.getMonth()+1,d.getDate());const b=toFa(j.jd)+' '+J_MONTHS[j.jm-1]+' '+toFa(j.jy);return wd?(WEEKDAYS[d.getDay()]+' '+b):b;}
+function weekdayOf(ds){return WEEKDAYS[parseDate(ds).getDay()];}
+function relDateText(ds){const diff=Math.round((parseDate(ds)-parseDate(todayStr()))/86400000);if(diff===0)return 'امروز';if(diff===1)return 'فردا';if(diff===2)return 'پس‌فردا';if(diff===-1)return 'دیروز';if(diff===-2)return 'پریروز';return diff>0?(toFa(diff)+' روز دیگر'):(toFa(-diff)+' روز پیش');}
+function fmtUpdated(iso){if(!iso)return '—';const d=new Date(iso);if(isNaN(d))return '—';const j=toJalali(d.getFullYear(),d.getMonth()+1,d.getDate());return toFa(j.jd)+' '+J_MONTHS[j.jm-1]+'، '+toFa(pad2(d.getHours())+':'+pad2(d.getMinutes()));}
+
+/* ═════════════ ۲) آیکون‌ها ═════════════ */
+const ICONS={
+  ball:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3v18M5.6 5.6c3.6 3.6 3.6 9.2 0 12.8M18.4 5.6c-3.6 3.6-3.6 9.2 0 12.8"/>',
+  trophy:'<path d="M8 21h8M12 17v4M7 4h10v5a5 5 0 0 1-10 0zM7 5H4a1 1 0 0 0-1 1c0 2.6 1.6 4.1 4 4.6M17 5h3a1 1 0 0 1 1 1c0 2.6-1.6 4.1-4 4.6"/>',
+  star:'<path d="M12 3l2.7 5.6 6.1.8-4.5 4.2 1.1 6-5.4-3-5.4 3 1.1-6L3.2 9.4l6.1-.8z"/>',
+  users:'<circle cx="9" cy="8" r="3.4"/><path d="M2.5 20c.8-3.4 3.4-5 6.5-5s5.7 1.6 6.5 5"/><circle cx="17.5" cy="9" r="2.4"/><path d="M16.5 15.2c2.6.3 4.4 1.8 5 4.6"/>',
+  calendar:'<rect x="3.5" y="5" width="17" height="16" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3.2 2"/>',
+  bell:'<path d="M6 8a6 6 0 0 1 12 0c0 5 2 6.5 2 6.5H4S6 13 6 8z"/><path d="M10 20a2.2 2.2 0 0 0 4 0"/>',
+  bolt:'<path d="M13 2 4.5 13.5H11L9.5 22 19 10h-6.5z"/>',
+  chart:'<path d="M4 20h16"/><path d="M7 20v-6M12 20V9M17 20V4"/>',
+  sliders:'<path d="M4 7h9M19 7h1M4 17h3M13 17h7"/><circle cx="16" cy="7" r="2.5"/><circle cx="10" cy="17" r="2.5"/>',
+  key:'<circle cx="7.5" cy="16.5" r="4"/><path d="M10.5 13.5 20 4M16 8l3 3M13 11l2 2"/>',
+  send:'<path d="M21 3 3.8 10.2l6.7 2.8L13.3 20z"/><path d="M21 3 10.5 13"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  trash:'<path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13.5h9L17.5 7M10 11v6M14 11v6"/>',
+  edit:'<path d="M4 20h4L20 8l-4-4L4 16zM13.5 6.5l4 4"/>',
+  download:'<path d="M12 3v11M7.5 10 12 14.5 16.5 10M4 18.5h16"/>',
+  upload:'<path d="M12 14V3M7.5 7 12 2.5 16.5 7M4 18.5h16"/>',
+  link:'<path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1.6 1.6"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1.6-1.6"/>',
+  refresh:'<path d="M20.5 12a8.5 8.5 0 1 1-2.6-6.1L20.5 8"/><path d="M20.5 3.5V8H16"/>',
+  check:'<path d="M4.5 12.5 10 18 19.5 6.5"/>',
+  x:'<path d="M5.5 5.5l13 13M18.5 5.5l-13 13"/>',
+  info:'<circle cx="12" cy="12" r="9"/><path d="M12 10.5V17M12 7.2v.4"/>',
+  lock:'<rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/>',
+  printer:'<path d="M7 8V3.5h10V8"/><path d="M6 16H4.5A1.5 1.5 0 0 1 3 14.5v-5A1.5 1.5 0 0 1 4.5 8h15A1.5 1.5 0 0 1 21 9.5v5a1.5 1.5 0 0 1-1.5 1.5H18"/><rect x="7" y="13" width="10" height="7.5"/>',
+  share:'<circle cx="6" cy="12" r="2.5"/><circle cx="17.5" cy="5.5" r="2.5"/><circle cx="17.5" cy="18.5" r="2.5"/><path d="M8.3 10.8l6.9-4M8.3 13.2l6.9 4"/>',
+  sparkle:'<path d="M12 3c.6 4.5 2.5 6.4 7 7-4.5.6-6.4 2.5-7 7-.6-4.5-2.5-6.4-7-7 4.5-.6 6.4-2.5 7-7z"/><path d="M19 3.5c.2 1.6.9 2.3 2.5 2.5-1.6.2-2.3.9-2.5 2.5-.2-1.6-.9-2.3-2.5-2.5 1.6-.2 2.3-.9 2.5-2.5z"/>',
+  eye:'<path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/>',
+  arrow:'<path d="M19 12H5M11.5 5.5 5 12l6.5 6.5"/>',
+  flag:'<path d="M5.5 21V4"/><path d="M5.5 4.5c4-2 7 2 12 0v9c-5 2-8-2-12 0"/>',
+  list:'<path d="M8.5 6.5H20M8.5 12H20M8.5 17.5H20M4 6.5h.01M4 12h.01M4 17.5h.01"/>',
+  save:'<path d="M5.5 3.5h10L20.5 8.5v12h-15z"/><path d="M8 3.5V8h7V3.5M8 20.5v-6h8v6"/>',
+  warn:'<path d="M12 3.5 22 20H2z"/><path d="M12 9.5V14M12 16.8v.4"/>',
+  crown:'<path d="M4 17.5 3 7.5l5 3.5L12 5l4 6 5-3.5-1 10zM4.5 20.5h15"/>',
+  whistle:'<circle cx="8" cy="14" r="4.5"/><path d="M12.3 12.6 20 8l-1 5h-4M8 9.5V7"/>'
+};
+function icon(n,cls){return '<svg class="'+(cls||'')+'" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:1em;height:1em">'+(ICONS[n]||'')+'</svg>';}
+
+/* ═════════════ ۳) داده نمونه ═════════════ */
+const STORAGE_KEY='sampad1_babol_league_v1';
+const CHAT_KEY='sampad1_babol_chat_v1';
+const CLOUD_KEY='sampad1_babol_cloud_v1';
+const DATA_VERSION=3;
+const SEASON_TEXT='فصل تحصیلی ۱۴۰۵–۱۴۰۶';
+const PALETTE=['#E8531F','#171717','#2C5F8A','#7B4FBF','#D99A1F','#C0392B','#3E8E9E','#6B4A2F'];
+function mkTeam(id,name,short,color){return{id,name,short,color};}
+function mkP(id,name,teamId,number,pos){return{id,name,teamId,number,pos};}
+function buildSeed(){
+  const D=n=>todayStr(addDays(new Date(),n));
+  const teams=[mkTeam('t1','آذرخش','آذ','#EA580C'),mkTeam('t2','طوفان','طو','#171717'),mkTeam('t3','شهاب','شه','#7B4FBF'),mkTeam('t4','شاهین','شا','#C2410C'),mkTeam('t5','آفتاب','آف','#D99A1F'),mkTeam('t6','صاعقه','صا','#9A3412'),mkTeam('t7','ستاره','ست','#F97316'),mkTeam('t8','عقاب','عق','#525252')];
+  const players=[
+    mkP('p1','آرمان رضایی','t1',7,'گارد رأس'),mkP('p2','امیرحسین کاظمی','t1',10,'گارد شوتینگ'),mkP('p3','پارسا محمدی','t1',14,'فوروارد'),mkP('p4','سامان نوری','t1',23,'سنتر'),
+    mkP('p5','علی احمدی','t2',5,'گارد رأس'),mkP('p6','محمد طاهری','t2',8,'گارد شوتینگ'),mkP('p7','رضا کریمی','t2',12,'فوروارد'),mkP('p8','حسین موسوی','t2',21,'سنتر'),
+    mkP('p9','مهدی عبادی','t3',3,'گارد رأس'),mkP('p10','سینا رستمی','t3',9,'گارد شوتینگ'),mkP('p11','کیان شریفی','t3',13,'فوروارد'),mkP('p12','آرش قاسمی','t3',20,'سنتر'),
+    mkP('p13','بهرام جعفری','t4',6,'گارد رأس'),mkP('p14','نیما صادقی','t4',10,'گارد شوتینگ'),mkP('p15','فرزان اکبری','t4',14,'فوروارد'),mkP('p16','مانی هاشمی','t4',24,'سنتر'),
+    mkP('p17','یوسف رحیمی','t5',1,'گارد رأس'),mkP('p18','طها مرادی','t5',4,'گارد شوتینگ'),mkP('p19','عرشا فرهادی','t5',15,'فوروارد'),mkP('p20','بردیا امینی','t5',22,'سنتر'),
+    mkP('p21','محمدعلی نادری','t6',2,'گارد رأس'),mkP('p22','پویا یوسفی','t6',16,'گارد شوتینگ'),mkP('p23','آرین حسینی','t6',18,'فوروارد'),mkP('p24','کامران ذوالفقاری','t6',25,'سنتر'),
+    mkP('p25','سبحان قربانی','t7',7,'گارد رأس'),mkP('p26','متین فلاح','t7',9,'گارد شوتینگ'),mkP('p27','ابوالفضل حیدری','t7',11,'فوروارد'),mkP('p28','رادین نعمتی','t7',17,'سنتر'),
+    mkP('p29','شایان خسروی','t8',3,'گارد رأس'),mkP('p30','امیر رستگار','t8',8,'گارد شوتینگ'),mkP('p31','بهنام عابدی','t8',12,'فوروارد'),mkP('p32','نیکان زند','t8',19,'سنتر')];
+  const games=[];
+  function seedGame(off,time,recess,h,a,hs,as,hS,aS){
+    const stats=[];const hp=players.filter(p=>p.teamId===h);const ap=players.filter(p=>p.teamId===a);
+    hS.forEach((s,i)=>stats.push({playerId:hp[i].id,pts:s[0],reb:s[1],ast:s[2]}));
+    aS.forEach((s,i)=>stats.push({playerId:ap[i].id,pts:s[0],reb:s[1],ast:s[2]}));
+    games.push({id:uid('g'),date:D(off),time,recess,homeId:h,awayId:a,homeScore:hs,awayScore:as,status:'finished',stats});
+  }
+  function seedSched(off,time,recess,h,a){games.push({id:uid('g'),date:D(off),time,recess,homeId:h,awayId:a,homeScore:null,awayScore:null,status:'scheduled',stats:[]});}
+  const R1='زنگ تفریح اول',R2='زنگ تفریح دوم',R3='زنگ تفریح سوم';
+  seedGame(-9,'09:45',R1,'t2','t4',54,41,[[20,4,7],[14,6,3],[12,9,2],[8,11,1]],[[16,3,5],[12,7,2],[8,8,3],[5,6,1]]);
+  seedGame(-8,'09:45',R1,'t5','t3',47,52,[[18,4,5],[13,3,4],[9,7,2],[7,8,1]],[[22,5,4],[15,3,6],[9,8,2],[6,7,1]]);
+  seedGame(-7,'11:50',R2,'t6','t8',38,44,[[14,3,4],[11,5,2],[8,6,2],[5,9,1]],[[17,4,6],[12,6,3],[9,9,2],[6,7,1]]);
+  seedGame(-6,'09:45',R1,'t1','t7',61,39,[[24,7,4],[16,4,8],[12,10,2],[9,12,1]],[[15,3,3],[10,5,4],[8,6,2],[6,5,1]]);
+  seedGame(-5,'11:50',R2,'t2','t5',49,37,[[18,4,8],[13,5,4],[10,8,3],[8,10,1]],[[14,4,3],[10,4,3],[8,6,2],[5,7,1]]);
+  seedGame(-4,'09:45',R1,'t3','t6',44,40,[[18,6,5],[12,4,7],[8,7,2],[6,9,1]],[[16,4,5],[12,5,3],[7,6,2],[5,8,1]]);
+  seedGame(-3,'11:50',R2,'t4','t8',55,48,[[20,5,7],[15,4,6],[12,9,3],[8,10,2]],[[19,5,5],[13,6,4],[10,10,2],[6,6,1]]);
+  seedGame(-2,'09:45',R1,'t1','t2',58,50,[[21,8,4],[17,4,9],[11,9,3],[9,11,1]],[[22,5,7],[14,5,4],[9,8,3],[5,9,1]]);
+  seedGame(-1,'11:50',R2,'t5','t7',42,37,[[15,4,4],[11,5,3],[9,7,2],[7,8,1]],[[14,5,3],[9,4,4],[8,8,2],[6,6,1]]);
+  seedGame(0,'09:45',R1,'t6','t4',35,51,[[13,3,3],[9,4,2],[7,5,2],[6,7,1]],[[19,6,6],[14,4,5],[11,8,2],[7,9,1]]);
+  seedSched(0,'11:50',R2,'t1','t5');
+  seedSched(1,'09:45',R1,'t3','t8');
+  seedSched(2,'11:50',R2,'t2','t7');
+  seedSched(4,'09:45',R1,'t5','t4');
+  seedSched(6,'14:25',R3,'t1','t3');
+  seedSched(8,'09:45',R1,'t6','t2');
+  return{v:DATA_VERSION,meta:{title:'لیگ بسکتبال سمپاد ۱ بابل',updated:new Date().toISOString()},
+    settings:{season:SEASON_TEXT,schoolName:'مدرسه سمپاد ۱ بابل',organizer:'دبیرخانه تربیت بدنی',
+      recessList:[{label:R1,time:'09:45'},{label:R2,time:'11:50'},{label:R3,time:'14:25'}],
+      tickerSpeed:38,password:'10102301',showAutoNews:true},
+    teams,players,games,
+    news:[
+      {id:uid('n'),text:'فصل جدید لیگ بسکتبال سمپاد ۱ بابل با حضور ۸ تیم آغاز شد؛ دیدارها هر روز در زنگ‌های تفریح برگزار می‌شود.',date:D(-9)},
+      {id:uid('n'),text:'چهار تیم برتر جدول در پایان دور رفت به مرحله حذفی راه می‌یابند.',date:D(-6)},
+      {id:uid('n'),text:'از دانش‌آموزان دعوت می‌شود در وقت تفریح از تیم‌های خود حمایت کنند.',date:D(-3)}
+    ]};
+}
+
+/* ═════════════ ۴) وضعیت و ذخیره ═════════════ */
+let state=null,stateIsSeed=false,preUpdateBackup=null;
+function loadState(){try{const raw=localStorage.getItem(STORAGE_KEY);if(raw){const o=JSON.parse(raw);
+  if(o&&o.v===DATA_VERSION&&Array.isArray(o.teams)&&Array.isArray(o.games)){
+    /* مهاجرت خودکار فصل تحصیلی به ۱۴۰۵–۱۴۰۶ بدون از دست رفتن داده‌ها */
+    if(o.settings&&typeof o.settings.season==='string'&&o.settings.season.indexOf('۱۴۰۴')!==-1){
+      o.settings.season=SEASON_TEXT;
+    }
+    stateIsSeed=false;return o;}}}catch(e){}stateIsSeed=true;return buildSeed();}
+function saveState(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(state));}catch(e){toast('فضای ذخیره‌سازی مرورگر پر است','destructive');}}
+function commit(silent){
+  stateIsSeed=false;
+  state.meta.updated=new Date().toISOString();
+  saveState();bcPost();renderAll();updateSaveChip();
+  if(isAuthed())Cloud.schedulePush();
+  if(adminOpen&&!silent&&adminUI.tab!=='chat')renderAdminTab();
+}
+const bc=('BroadcastChannel' in window)?new BroadcastChannel('sampad-league-sync'):null;
+function bcPost(){if(bc)bc.postMessage({kind:'league-state',state});}
+if(bc){bc.onmessage=(ev)=>{if(ev.data&&ev.data.kind==='league-state'&&ev.data.state){state=ev.data.state;stateIsSeed=false;renderAll();toast('اطلاعات لیگ به‌روزرسانی شد');}};}
+
+/* ═════════════ ۵) حالت آنلاین (سرور ابری) ═════════════ */
+const POLL_MS=20000;
+const Cloud={
+  cfg:null,status:'off',lastErr:'',lastSync:null,pushTimer:null,pollTimer:null,lastToastErr:0,
+  live(){return this.status==='live'&&!!this.cfg;},
+  code(){return this.cfg?(this.cfg.p+':'+this.cfg.id):'';},
+  parseCode(t){t=String(t||'').trim();const m=t.match(/#cloud=([^&]+)/);if(m)t=decodeURIComponent(m[1]).trim();
+    if(/^jsn:/.test(t))return{p:'jsn',id:t.slice(4).trim()};if(/^jbl:/.test(t))return{p:'jbl',id:t.slice(4).trim()};if(/^cus:/.test(t))return{p:'cus',id:t.slice(4).trim()};
+    let a=t.match(/jsonstorage\.net\/v1\/json\/([A-Za-z0-9\-]+)/i);if(a)return{p:'jsn',id:a[1]};
+    a=t.match(/jsonblob\.com\/api\/jsonBlob\/([A-Za-z0-9]+)/i);if(a)return{p:'jbl',id:a[1]};
+    try{const j=JSON.parse(t);if(j&&(j.p==='jsn'||j.p==='jbl'||j.p==='cus')&&j.id)return j;}catch(e){}return null;},
+  endpoint(){if(!this.cfg)return null;if(this.cfg.p==='jsn')return 'https://api.jsonstorage.net/v1/json/'+encodeURIComponent(this.cfg.id);
+    if(this.cfg.p==='jbl')return 'https://jsonblob.com/api/jsonBlob/'+encodeURIComponent(this.cfg.id);
+    if(this.cfg.p==='cus')return this.cfg.id;return null;},
+  async createStore(){
+    this.status='connecting';this.lastErr='';this.updateUI();
+    const body=JSON.stringify(state);let cfg=null;
+    try{const r=await fetchT('https://api.jsonstorage.net/v1/json',{method:'POST',headers:{'Content-Type':'application/json'},body},15000);
+      if(r.ok){const j=await r.json();if(j&&j.uri)cfg={p:'jsn',id:String(j.uri).split('/').pop()};}}catch(e){}
+    if(!cfg){try{const r=await fetchT('https://jsonblob.com/api/jsonBlob',{method:'POST',headers:{'Content-Type':'application/json'},body},15000);
+      const id=r.headers.get('X-jsonblob')||(r.headers.get('Location')||'').split('/').pop();
+      if(r.ok&&id)cfg={p:'jbl',id:id};}catch(e){}}
+    if(cfg){this.cfg=cfg;this.status='live';try{localStorage.setItem(CLOUD_KEY,JSON.stringify(cfg));}catch(e){}
+      this.startPolling();this.push();}
+    else{this.status='error';this.lastErr='ساخت فروشگاه ابری ناموفق بود — اتصال اینترنت را بررسی کنید';}
+    this.updateUI();return cfg;},
+  async connect(codeOrCfg,silent){
+    const cfg=(codeOrCfg&&typeof codeOrCfg==='object')?codeOrCfg:this.parseCode(codeOrCfg);
+    if(!cfg||!cfg.id){this.status='error';this.lastErr='کد ابری معتبر نیست';if(!silent)toast(this.lastErr,'destructive');this.updateUI();return false;}
+    this.cfg=cfg;this.status='connecting';this.updateUI();
+    let ok=false;
+    try{const r=await fetchT(this.endpoint(),{method:'GET'},12000);ok=r.ok;}catch(e){ok=false;}
+    if(!ok){this.status='error';this.lastErr='اتصال به فروشگاه ابری برقرار نشد';if(!silent)toast(this.lastErr,'destructive');this.updateUI();return false;}
+    try{localStorage.setItem(CLOUD_KEY,JSON.stringify(cfg));}catch(e){}
+    this.status='live';this.lastErr='';this.startPolling();
+    if(isAuthed())this.push();
+    await this.pull(false);
+    if(!silent)toast('حالت آنلاین فعال شد — تغییرات به‌صورت زنده دریافت می‌شود');
+    this.updateUI();return true;},
+  disconnect(){if(this.pollTimer){clearInterval(this.pollTimer);this.pollTimer=null;}clearTimeout(this.pushTimer);
+    this.cfg=null;this.status='off';this.lastErr='';try{localStorage.removeItem(CLOUD_KEY);}catch(e){}this.updateUI();},
+  startPolling(){if(this.pollTimer)clearInterval(this.pollTimer);
+    this.pollTimer=setInterval(()=>{if(!document.hidden)this.pull(false);},POLL_MS);},
+  schedulePush(){if(!this.cfg||!isAuthed())return;clearTimeout(this.pushTimer);this.pushTimer=setTimeout(()=>this.push(),1800);},
+  async push(){if(!this.cfg||!isAuthed())return;
+    try{const r=await fetchT(this.endpoint(),{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify(state)},15000);
+      if(!r.ok)throw new Error('status '+r.status);
+      if(this.status!=='live'){this.status='live';this.lastErr='';this.updateUI();}
+      this.lastSync=new Date();updateSaveChip();}
+    catch(e){this.status='error';this.lastErr='ارسال به سرور ابری ناموفق بود؛ در اتصال بعدی ارسال می‌شود';this.updateUI();
+      if(Date.now()-this.lastToastErr>180000){this.lastToastErr=Date.now();toast('همگام‌سازی ابری موقتاً ناموفق بود؛ داده‌ها محلی ذخیره شده‌اند','destructive');}}},
+  async pull(showToast){if(!this.cfg)return;
+    try{const r=await fetchT(this.endpoint(),{method:'GET'},12000);if(!r.ok)throw new Error('status '+r.status);
+      const remote=await r.json();
+      if(!remote||!Array.isArray(remote.teams)||!Array.isArray(remote.games))throw new Error('bad payload');
+      const ru=new Date((remote.meta&&remote.meta.updated)||0).getTime();
+      const lu=new Date((state&&state.meta&&state.meta.updated)||0).getTime();
+      if(ru>lu+500||stateIsSeed){state=remote;stateIsSeed=false;saveState();renderAll();if(showToast)toast('اطلاعات زنده از سرور ابری دریافت شد');}
+      if(this.status!=='live'){this.status='live';this.lastErr='';this.updateUI();}
+      this.lastSync=new Date();}
+    catch(e){if(this.status==='live'){this.status='error';this.lastErr='دریافت از سرور ابری ناموفق بود؛ تلاش مجدد خودکار انجام می‌شود';this.updateUI();}}},
+  badge(){const s=this.status;const cls=s==='live'?'st-live':s==='error'?'st-err':'st-wait';
+    const lbl={off:'غیرفعال',connecting:'در حال اتصال…',live:'متصل و زنده',error:'خطای اتصال'}[s]||'غیرفعال';
+    return '<span class="st-badge '+cls+'">'+lbl+'</span>';},
+  updateUI(){updateSaveChip();
+    const hd=document.getElementById('hdCloud');
+    if(hd){hd.hidden=!this.live();}
+    if(adminOpen&&adminUI.tab==='data')renderAdminTab();}
+};
+function buildConnectLink(){return location.href.split('#')[0]+'#cloud='+encodeURIComponent(Cloud.code());}
+function checkHashCloud(){const h=location.hash||'';const m=h.match(/#cloud=([^&]+)/);if(!m)return false;
+  history.replaceState(null,'',location.pathname+location.search);
+  const cfg=Cloud.parseCode(decodeURIComponent(m[1]));
+  if(!cfg){toast('کد ابری در لینک معتبر نیست','destructive');return true;}
+  Cloud.connect(cfg,true);return true;}
+function initCloud(){let cfg=null;try{const raw=localStorage.getItem(CLOUD_KEY);if(raw)cfg=JSON.parse(raw);}catch(e){}
+  if(!cfg&&CLOUD_CODE_DEFAULT){cfg=Cloud.parseCode(CLOUD_CODE_DEFAULT);if(cfg){try{localStorage.setItem(CLOUD_KEY,JSON.stringify(cfg));}catch(e){}}}
+  if(cfg)Cloud.connect(cfg,true);}
+
+/* ═════════════ ۶) لینک به‌روزرسانی آفلاین ═════════════ */
+function lzwEnc(str){const dict={};const out=[];let phrase=str[0];let code=256;
+  for(let i=1;i<str.length;i++){const c=str[i];if(dict[phrase+c]!==undefined){phrase+=c;}else{out.push(phrase.length>1?dict[phrase]:phrase.charCodeAt(0));dict[phrase+c]=code++;phrase=c;}}
+  out.push(phrase.length>1?dict[phrase]:phrase.charCodeAt(0));return out;}
+function lzwDec(codes){const dict={};let code=256;let phrase=String.fromCharCode(codes[0]);let out=phrase;
+  for(let i=1;i<codes.length;i++){const k=codes[i];const cur=(k<256)?String.fromCharCode(k):(dict[k]||(phrase+phrase[0]));out+=cur;dict[code++]=phrase+cur[0];phrase=cur;}return out;}
+function codesToB64(codes){const bytes=new Uint8Array(codes.length*2);codes.forEach((c,i)=>{bytes[i*2]=c&255;bytes[i*2+1]=c>>8;});
+  let bin='';for(let i=0;i<bytes.length;i+=0x8000){bin+=String.fromCharCode.apply(null,bytes.subarray(i,i+0x8000));}
+  return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'');}
+function b64ToCodes(b64){b64=b64.replace(/-/g,'+').replace(/_/g,'/');while(b64.length%4)b64+='=';
+  const bin=atob(b64);const codes=[];for(let i=0;i<bin.length;i+=2){codes.push(bin.charCodeAt(i)|(bin.charCodeAt(i+1)<<8));}return codes;}
+function encodeUpdate(data){const json=JSON.stringify(data);return 'v'+DATA_VERSION+'.'+codesToB64(lzwEnc(json))+'.'+djb2(json).toString(36);}
+function decodeUpdate(payload){try{const parts=String(payload).split('.');if(parts.length!==3)return null;
+  const json=lzwDec(b64ToCodes(parts[1]));if(djb2(json).toString(36)!==parts[2])return null;
+  const obj=JSON.parse(json);if(!obj||!Array.isArray(obj.teams)||!Array.isArray(obj.games)||!obj.settings)return null;return obj;}catch(e){return null;}}
+function buildUpdateLink(){return location.href.split('#')[0]+'#upd='+encodeUpdate(state);}
+function checkHashUpdate(){const h=location.hash;if(!h||h.indexOf('#upd=')!==0)return;
+  const payload=decodeUpdate(h.slice(5));history.replaceState(null,'',location.pathname+location.search);
+  if(!payload){toast('لینک به‌روزرسانی معتبر نیست','destructive');return;}
+  const remote=new Date(payload.meta.updated||0).getTime();
+  const local=new Date(state.meta.updated||0).getTime();
+  if(remote>=local||stateIsSeed){preUpdateBackup=JSON.parse(JSON.stringify(state));
+    state=payload;stateIsSeed=false;
+    if(state.settings&&typeof state.settings.season==='string'&&state.settings.season.indexOf('۱۴۰۴')!==-1){state.settings.season=SEASON_TEXT;}
+    saveState();renderAll();
+    toast('اطلاعات لیگ به نسخه جدید به‌روزرسانی شد','ok','بازگشت به قبلی',()=>{if(preUpdateBackup){state=preUpdateBackup;preUpdateBackup=null;saveState();renderAll();toast('نسخه قبلی بازیابی شد');}});}
+  else toast('نسخه فعلی سایت جدیدتر از لینک است','ok');}
+window.addEventListener('hashchange',()=>{if(!checkHashCloud())checkHashUpdate();});
+
+/* ═════════════ ۷) محاسبات لیگ ═════════════ */
+function teamById(id){return state.teams.find(t=>t.id===id)||null;}
+function playerById(id){return state.players.find(p=>p.id===id)||null;}
+function playersOf(tid){return state.players.filter(p=>p.teamId===tid);}
+function finishedGames(){return state.games.filter(g=>g.status==='finished'&&g.homeScore!=null).sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));}
+function scheduledGames(){return state.games.filter(g=>g.status==='scheduled').sort((a,b)=>(a.date+a.time).localeCompare(b.date+b.time));}
+function gameWinner(g){if(g.homeScore==null)return null;if(g.homeScore>g.awayScore)return g.homeId;if(g.awayScore>g.homeScore)return g.awayId;return null;}
+function computeStandings(){
+  const rows=state.teams.map(t=>({team:t,gp:0,w:0,l:0,pf:0,pa:0,form:[]}));
+  const map={};rows.forEach(r=>{map[r.team.id]=r;});
+  finishedGames().forEach(g=>{const h=map[g.homeId],a=map[g.awayId];if(!h||!a)return;
+    h.gp++;a.gp++;h.pf+=g.homeScore;h.pa+=g.awayScore;a.pf+=g.awayScore;a.pa+=g.homeScore;
+    if(g.homeScore>g.awayScore){h.w++;a.l++;h.form.push('W');a.form.push('L');}else{a.w++;h.l++;a.form.push('W');h.form.push('L');}});
+  rows.forEach(r=>{r.diff=r.pf-r.pa;r.pts=r.w*2+r.l;r.pct=r.gp?r.w/r.gp:0;
+    let s=0,type=null;for(let i=r.form.length-1;i>=0;i--){if(!type){type=r.form[i];s=1;}else if(r.form[i]===type){s++;}else break;}
+    r.streak=s;r.streakType=type;});
+  rows.sort((a,b)=>(b.pct-a.pct)||(b.w-a.w)||(b.diff-a.diff)||(b.pf-a.pf)||a.team.name.localeCompare(b.team.name,'fa'));
+  return rows;}
+function computePlayerStats(){
+  const map={};state.players.forEach(p=>{map[p.id]={player:p,gp:0,pts:0,reb:0,ast:0};});
+  finishedGames().forEach(g=>{(g.stats||[]).forEach(s=>{const m=map[s.playerId];if(!m)return;m.gp++;m.pts+=s.pts||0;m.reb+=s.reb||0;m.ast+=s.ast||0;});});
+  return Object.values(map).filter(m=>m.gp>0).map(m=>{const avgPts=m.pts/m.gp,avgReb=m.reb/m.gp,avgAst=m.ast/m.gp;
+    return Object.assign(m,{avgPts,avgReb,avgAst,eff:avgPts+avgReb*1.2+avgAst*1.5});});}
+function playerLeaderboard(metric,teamId){
+  let list=computePlayerStats();
+  if(teamId&&teamId!=='all')list=list.filter(m=>m.player.teamId===teamId);
+  const key=metric==='reb'?'avgReb':metric==='ast'?'avgAst':metric==='eff'?'eff':'avgPts';
+  list.sort((a,b)=>b[key]-a[key]);return{list:list.slice(0,10),key};}
+function teamPowerRanking(){const rows=computeStandings();
+  return rows.map(r=>Object.assign({},r,{power:r.pct*100+r.diff*0.6+(r.streakType==='W'?r.streak*2:0)})).sort((a,b)=>b.power-a.power);}
+function gamesOn(ds){return state.games.filter(g=>g.date===ds).sort((a,b)=>a.time.localeCompare(b.time));}
+function latestFinishedDate(){const f=finishedGames();return f.length?f[f.length-1].date:null;}
+function gameTopPerformer(g){let best=null;(g.stats||[]).forEach(s=>{if(!best||(s.pts||0)>best.pts)best=s;});return best;}
+function gameDatetime(g){const d=parseDate(g.date);const t=(g.time||'09:45').split(':');d.setHours(+t[0]||0,+t[1]||0,0,0);return d;}
+function getNextGame(){const now=new Date();return scheduledGames().find(g=>gameDatetime(g)>now)||null;}
+function todayTopPerformer(){const td=todayStr();let best=null;
+  gamesOn(td).forEach(g=>{if(g.status!=='finished')return;(g.stats||[]).forEach(s=>{if(!best||(s.pts||0)>best.pts)best=s;});});return best;}
+function remainingText(g){const ms=gameDatetime(g)-new Date();if(ms<=0)return null;
+  const days=Math.floor(ms/86400000),hrs=Math.floor((ms%86400000)/3600000);
+  if(days>0)return toFa(days)+' روز و '+toFa(hrs)+' ساعت مانده';
+  return toFa(hrs)+' ساعت و '+toFa(Math.floor((ms%3600000)/60000))+' دقیقه مانده';}
+function recOf(tid){const r=computeStandings().find(x=>x.team.id===tid);return r?(toFa(r.w)+' برد — '+toFa(r.l)+' باخت'):'';}
+
+/* ═════════════ ۸) اجزای مشترک رندر ═════════════ */
+function teamLogo(t,size){const s=size||28;const fs=Math.round(s*0.42);
+  return '<span class="team-logo" style="background:'+(t.color||'#EA580C')+';height:'+s+'px;width:'+s+'px;font-size:'+fs+'px">'+esc(t.short||t.name.slice(0,2))+'</span>';}
+function metaChip(ic,txt){return '<span>'+icon(ic)+txt+'</span>';}
+function rankCls(r){return r===1?'rank-1':r===2?'rank-2':r===3?'rank-3':(r<=4?'rank-top':'rank-rest');}
+
+/* ═════════════ ۹) رندر صفحات عمومی ═════════════ */
+function safeRender(n,fn){try{fn();}catch(e){if(window.console&&console.warn)console.warn('[render:'+n+']',e);}}
+
+function renderHome(){
+  const pg=document.getElementById('page-home');
+  const f=finishedGames(),s=scheduledGames(),next=getNextGame();
+  const leader=computeStandings()[0];
+  const topP=playerLeaderboard('pts','all').list[0];
+  let h='<div class="stack-2">';
+  h+='<div class="tiles">'
+    +'<div class="tile"><div class="tile-ic">'+icon('users')+'</div><div><div class="tile-val">'+toFa(state.teams.length)+'</div><div class="tile-label">تیم شرکت‌کننده</div></div></div>'
+    +'<div class="tile"><div class="tile-ic">'+icon('star')+'</div><div><div class="tile-val">'+toFa(state.players.length)+'</div><div class="tile-label">بازیکن</div></div></div>'
+    +'<div class="tile"><div class="tile-ic">'+icon('check')+'</div><div><div class="tile-val">'+toFa(f.length)+'</div><div class="tile-label">بازی انجام‌شده</div></div></div>'
+    +'<div class="tile"><div class="tile-ic">'+icon('calendar')+'</div><div><div class="tile-val">'+toFa(s.length)+'</div><div class="tile-label">بازی پیش‌رو</div></div></div>'
+    +'</div>';
+  h+='<div class="card"><div class="card-header row"><div class="card-head-txt"><div class="card-title">'+icon('bolt')+'بازی بعدی لیگ</div><div class="card-desc">شمارش معکوس تا شروع دیدار</div></div><span class="badge badge-emerald">'+icon('clock')+'زنده</span></div><div class="card-content pt0">';
+  if(next){
+    const hm=teamById(next.homeId),am=teamById(next.awayId);
+    h+='<div class="hero-match">'
+      +'<div class="hm-side">'+teamLogo(hm,64)+'<div class="nm">'+esc(hm.name)+'</div><div class="rec">'+recOf(hm.id)+'</div></div>'
+      +'<div class="hm-mid"><span class="hm-vs">VS</span><div class="cd-grid">'
+      +'<div class="cd-cell"><b id="cdD">۰</b><span>روز</span></div>'
+      +'<div class="cd-cell"><b id="cdH">۰</b><span>ساعت</span></div>'
+      +'<div class="cd-cell"><b id="cdM">۰</b><span>دقیقه</span></div>'
+      +'<div class="cd-cell"><b id="cdS">۰</b><span>ثانیه</span></div>'
+      +'</div></div>'
+      +'<div class="hm-side">'+teamLogo(am,64)+'<div class="nm">'+esc(am.name)+'</div><div class="rec">'+recOf(am.id)+'</div></div>'
+      +'</div>'
+      +'<div class="match-meta">'
+      +metaChip('calendar',fmtJalali(next.date,true))
+      +metaChip('clock','ساعت '+toFa(next.time))
+      +metaChip('bell',esc(next.recess||'زنگ تفریح'))
+      +'</div>';
+  }else{
+    h+='<div class="empty"><div class="empty-ic">'+icon('calendar')+'</div>بازی بعدی هنوز برنامه‌ریزی نشده است؛ به‌زودی از همین صفحه اعلام می‌شود.</div>';
+  }
+  h+='</div></div>';
+  const td=todayStr(),tg=gamesOn(td);
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('calendar')+'پرونده امروز</div><div class="card-desc">'+fmtJalali(td,true)+'</div></div><div class="card-content pt0"><div class="stack">';
+  if(tg.length){
+    tg.forEach(g=>{const hm=teamById(g.homeId),am=teamById(g.awayId);
+      const mid=(g.status==='finished')
+        ?'<span class="score-chip">'+toFa(g.homeScore)+' – '+toFa(g.awayScore)+'</span>'
+        :'<span class="vs-chip">'+toFa(g.time)+'</span>';
+      h+='<div class="match-btn"><div class="match-main">'
+        +'<div class="match-side home">'+teamLogo(hm,26)+'<span class="tname">'+esc(hm.name)+'</span></div>'
+        +'<div class="match-center">'+mid+'<span class="status-sub">'+(g.status==='finished'?'پایان یافته':esc(g.recess||''))+'</span></div>'
+        +'<div class="match-side">'+teamLogo(am,26)+'<span class="tname">'+esc(am.name)+'</span></div>'
+        +'</div></div>';});
+  }else h+='<div class="empty dashed">امروز بازیی در برنامه نیست.</div>';
+  h+='</div></div></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('chart')+'وضعیت لیگ در یک نگاه</div></div><div class="card-content pt0"><div class="stack">'
+    +(leader?'<div class="rowline">'+icon('trophy')+'صدرنشین جدول: <b>'+esc(leader.team.name)+'</b> با '+toFa(leader.w)+' برد از '+toFa(leader.gp)+' بازی</div>':'')
+    +(topP?'<div class="rowline">'+icon('star')+'پرامتیازترین بازیکن: <b>'+esc(topP.player.name)+'</b> با میانگین '+faNum(topP.avgPts,1)+' امتیاز</div>':'')
+    +'<div class="counts-line"><span>'+toFa(state.teams.length)+' تیم</span><span>'+toFa(state.players.length)+' بازیکن</span><span>'+toFa(f.length)+' بازی برگزارشده</span><span>'+toFa(s.length)+' بازی پیش‌رو</span></div>'
+    +'</div></div></div>';
+  h+='</div>';
+  pg.innerHTML=h;
+  scheduleCountdown();
+}
+
+function renderStandings(){
+  const pg=document.getElementById('page-standings');
+  const rows=computeStandings();
+  let h='<div class="card"><div class="card-header row"><div class="card-head-txt"><div class="card-title">'+icon('list')+'جدول لیگ</div><div class="card-desc">رده‌بندی رسمی پس از هر بازی به‌روزرسانی می‌شود — به‌روزرسانی: '+fmtUpdated(state.meta.updated)+'</div></div><button class="btn btn-sm btn-outline" id="printBtn2">'+icon('printer')+'چاپ</button></div><div class="card-content pt0">';
+  if(!rows.length){h+='<div class="empty"><div class="empty-ic">'+icon('users')+'</div>تیمی ثبت نشده است.</div>';}
+  else{
+    h+='<div class="tblwrap"><table class="data min-w-760"><thead><tr class="bghead">'
+      +'<th class="center">رتبه</th><th>تیم</th><th class="center">بازی</th><th class="center">برد</th><th class="center">باخت</th><th class="center">امتیاز</th><th class="center">تفاضل</th><th class="center">روند</th><th class="center">آخرین بازی‌ها</th>'
+      +'</tr></thead><tbody>';
+    rows.forEach((r,i)=>{
+      const rank=i+1;
+      const cut=(rank===4&&rows.length>4)?'<tr><td colspan="9" class="center"><span class="badge-aoq">مرز صعود به مرحله حذفی — چهار تیم بالا</span></td></tr>':'';
+      const form=r.form.slice(-5).map(f=>'<span class="form-pill '+f+'" title="'+(f==='W'?'برد':'باخت')+'">'+(f==='W'?'ب':'ا')+'</span>').join('');
+      const streak=r.streak?'<span class="'+(r.streakType==='W'?'text-emerald':'text-rose')+'" style="font-weight:700">'+toFa(r.streak)+' '+(r.streakType==='W'?'برد متوالی':'باخت متوالی')+'</span>':'<span class="text-muted">—</span>';
+      const diff=r.gp?'<span class="'+(r.diff>=0?'text-emerald':'text-rose')+'" style="font-weight:700" dir="ltr">'+(r.diff>0?'+':'')+toFa(r.diff)+'</span>':'<span class="text-muted">—</span>';
+      h+='<tr class="'+(rank<=4?'row-first':'')+'">'
+        +'<td class="center"><span class="rank-circle '+rankCls(rank)+'">'+toFa(rank)+'</span></td>'
+        +'<td><span class="team-cell">'+teamLogo(r.team,26)+'<span class="tname">'+esc(r.team.name)+'</span></span></td>'
+        +'<td class="center">'+toFa(r.gp)+'</td>'
+        +'<td class="center text-emerald" style="font-weight:700">'+toFa(r.w)+'</td>'
+        +'<td class="center text-rose" style="font-weight:700">'+toFa(r.l)+'</td>'
+        +'<td class="center"><span class="pts-pill">'+toFa(r.pts)+'</span></td>'
+        +'<td class="center">'+diff+'</td>'
+        +'<td class="center">'+streak+'</td>'
+        +'<td><span class="form-badges">'+form+'</span></td>'
+        +'</tr>'+cut;});
+    h+='</tbody></table></div>';
+    h+='<div class="legend">'
+      +'<span><span class="dot" style="background:#fbbf24"></span> رتبه اول</span>'
+      +'<span><span class="dot" style="background:var(--rank-top-bg)"></span> محدوده صعود (۴ تیم)</span>'
+      +'<span><span class="form-pill W">ب</span> برد</span>'
+      +'<span><span class="form-pill L">ا</span> باخت</span>'
+      +'<span>هر برد ۲ امتیاز، هر باخت ۱ امتیاز</span>'
+      +'</div>';
+  }
+  h+='</div></div>';
+  pg.innerHTML=h;
+  const pb=document.getElementById('printBtn2');
+  if(pb)pb.addEventListener('click',()=>window.print());
+}
+
+function renderResults(){
+  const pg=document.getElementById('page-results');
+  const td=todayStr();
+  let list=gamesOn(td).filter(g=>g.status==='finished');
+  let title='نتایج بازی‌های امروز',desc=fmtJalali(td,true);
+  if(!list.length){const ld=latestFinishedDate();
+    if(ld&&ld!==td){list=gamesOn(ld).filter(g=>g.status==='finished');title='آخرین نتایج';desc=fmtJalali(ld,true);}}
+  let h='<div class="card"><div class="card-header"><div class="card-title">'+icon('check')+'<span id="resTitle">'+title+'</span><span class="badge badge-emerald">'+toFa(list.length)+' دیدار</span></div><div class="card-desc">'+desc+' — شامل ساعت، زنگ تفریح و ستاره بازی</div></div><div class="card-content pt0"><div class="stack">';
+  if(!list.length){
+    h+='<div class="empty"><div class="empty-ic">'+icon('ball')+'</div>هنوز نتیجه‌ای ثبت نشده است؛ نتایج بلافاصله پس از پایان هر بازی اعلام می‌شود.</div>';
+  }else{
+    list.forEach(g=>{
+      const hm=teamById(g.homeId),am=teamById(g.awayId);
+      const top=gameTopPerformer(g);const topP=top?playerById(top.playerId):null;
+      h+='<div class="match-btn"><div class="match-main">'
+        +'<div class="match-side home">'+teamLogo(hm,30)+'<span class="tname">'+esc(hm.name)+'</span></div>'
+        +'<div class="match-center"><span class="score-chip">'+toFa(g.homeScore)+' – '+toFa(g.awayScore)+'</span><span class="status-sub">پایان یافته</span></div>'
+        +'<div class="match-side">'+teamLogo(am,30)+'<span class="tname">'+esc(am.name)+'</span></div>'
+        +'</div><div class="match-meta">'
+        +metaChip('clock',toFa(g.time))
+        +metaChip('bell',esc(g.recess||''))
+        +(topP?metaChip('star','ستاره بازی: <b>'+esc(topP.name)+'</b> — '+toFa(top.pts)+' امتیاز، '+toFa(top.reb)+' ریباند'):'')
+        +'</div></div>';});
+  }
+  h+='</div></div></div>';
+  pg.innerHTML=h;
+}
+
+let plMetric='pts',plTeam='all';
+function renderPlayers(){
+  const pg=document.getElementById('page-players');
+  if(!state.teams.some(t=>t.id===plTeam))plTeam='all';
+  const data=playerLeaderboard(plMetric,plTeam);
+  const mName=plMetric==='reb'?'ریباند':plMetric==='ast'?'پاس':plMetric==='eff'?'اثربخشی':'امتیاز';
+  let h='<div class="card"><div class="card-header row"><div class="card-head-txt"><div class="card-title">'+icon('star')+'بازیکنان برتر</div><div class="card-desc">بر اساس میانگین آمار در بازی‌های انجام‌شده</div></div>'
+    +'<div class="filterbar">'
+    +'<div class="sub-tabs" style="margin-bottom:0">'
+    +'<button class="sub-tab '+(plMetric==='pts'?'active':'')+'" data-m="pts">'+icon('ball')+'امتیاز</button>'
+    +'<button class="sub-tab '+(plMetric==='reb'?'active':'')+'" data-m="reb">ریباند</button>'
+    +'<button class="sub-tab '+(plMetric==='ast'?'active':'')+'" data-m="ast">پاس</button>'
+    +'<button class="sub-tab '+(plMetric==='eff'?'active':'')+'" data-m="eff">اثربخشی</button>'
+    +'</div>'
+    +'<select class="input w-sel" id="plTeamFilter"><option value="all">همه تیم‌ها</option>'
+    +state.teams.map(t=>'<option value="'+t.id+'"'+(t.id===plTeam?' selected':'')+'>'+esc(t.name)+'</option>').join('')
+    +'</select></div></div><div class="card-content pt0">';
+  if(!data.list.length){h+='<div class="empty"><div class="empty-ic">'+icon('users')+'</div>هنوز آماری ثبت نشده است.</div>';}
+  else{
+    const max=Math.max.apply(null,data.list.map(m=>m[data.key]).concat([0.001]));
+    h+='<div class="tblwrap"><table class="data" style="min-width:600px"><thead><tr class="bghead">'
+      +'<th class="center">رتبه</th><th>بازیکن</th><th>تیم</th><th class="center">بازی</th><th class="center">میانگین '+mName+'</th><th style="width:9rem">نسبت به صدر</th>'
+      +'</tr></thead><tbody>';
+    data.list.forEach((m,i)=>{
+      const t=teamById(m.player.teamId);
+      h+='<tr class="'+(i===0?'row-first':'')+'">'
+        +'<td class="center"><span class="rank-circle '+rankCls(i+1)+'">'+toFa(i+1)+'</span></td>'
+        +'<td><b>'+esc(m.player.name)+'</b> <span class="text-muted" style="font-size:.7rem">شماره '+toFa(m.player.number)+'</span></td>'
+        +'<td><span class="team-cell">'+teamLogo(t,22)+'<span>'+esc(t?t.name:'—')+'</span></span></td>'
+        +'<td class="center">'+toFa(m.gp)+'</td>'
+        +'<td class="center"><span class="pts-pill">'+faNum(m[data.key],1)+'</span></td>'
+        +'<td><div class="pl-bar"><i style="width:'+Math.round(m[data.key]/max*100)+'%"></i></div></td>'
+        +'</tr>';});
+    h+='</tbody></table></div>';
+  }
+  h+='</div></div>';
+  pg.innerHTML=h;
+  pg.querySelectorAll('.sub-tab').forEach(b=>b.addEventListener('click',()=>{plMetric=b.dataset.m;renderPlayers();}));
+  const sel=pg.querySelector('#plTeamFilter');
+  if(sel)sel.addEventListener('change',()=>{plTeam=sel.value;renderPlayers();});
+}
+
+function renderTeams(){
+  const pg=document.getElementById('page-teams');
+  const ranks=teamPowerRanking();
+  let h='<div class="card"><div class="card-header"><div class="card-title">'+icon('trophy')+'تیم‌های برتر</div><div class="card-desc">رتبه‌بندی قدرت بر پایه درصد برد، تفاضل امتیاز و روند نتایج</div></div><div class="card-content pt0">';
+  if(!ranks.length){h+='<div class="empty"><div class="empty-ic">'+icon('users')+'</div>تیمی ثبت نشده است.</div>';}
+  else{
+    const top3=ranks.slice(0,3),rest=ranks.slice(3);
+    const order=top3.length===3?[top3[1],top3[0],top3[2]]:top3;
+    h+='<div class="pod-grid">'+order.map(r=>{
+      const rank=ranks.indexOf(r)+1;
+      return '<div class="pod-card'+(rank===1?' first':'')+'">'
+        +'<span class="pod-rank">'+toFa(rank)+'</span>'
+        +(rank===1?'<span style="color:#f59e0b">'+icon('crown','')+'</span>':'')
+        +teamLogo(r.team,56)
+        +'<b>'+esc(r.team.name)+'</b>'
+        +'<div class="rec">'+toFa(r.w)+' برد و '+toFa(r.l)+' باخت در '+toFa(r.gp)+' بازی</div>'
+        +'<div class="pct">'+faNum(Math.round(r.pct*100))+'٪</div>'
+        +'<div class="rec">درصد برد | تفاضل '+(r.diff>0?'+':'')+toFa(r.diff)+'</div>'
+        +'</div>';}).join('')+'</div>';
+    if(rest.length){
+      h+='<div class="sep" style="margin:1.25rem 0"></div><div class="tblwrap"><table class="data"><thead><tr class="bghead">'
+        +'<th class="center">رتبه</th><th>تیم</th><th class="center">برد — باخت</th><th class="center">درصد برد</th><th class="center">تفاضل</th>'
+        +'</tr></thead><tbody>';
+      rest.forEach(r=>{const rank=ranks.indexOf(r)+1;
+        h+='<tr><td class="center"><span class="rank-circle rank-rest">'+toFa(rank)+'</span></td>'
+          +'<td><span class="team-cell">'+teamLogo(r.team,24)+'<span class="tname">'+esc(r.team.name)+'</span></span></td>'
+          +'<td class="center">'+toFa(r.w)+' — '+toFa(r.l)+'</td>'
+          +'<td class="center">'+faNum(Math.round(r.pct*100))+'٪</td>'
+          +'<td class="center '+(r.diff>=0?'text-emerald':'text-rose')+'" style="font-weight:700">'+(r.diff>0?'+':'')+toFa(r.diff)+'</td></tr>';});
+      h+='</tbody></table></div>';
+    }
+  }
+  h+='</div></div>';
+  pg.innerHTML=h;
+}
+
+function renderSchedule(){
+  const pg=document.getElementById('page-schedule');
+  const list=scheduledGames();
+  let h='<div class="card"><div class="card-header"><div class="card-title">'+icon('calendar')+'بازی‌های آینده</div><div class="card-desc">روز، ساعت و زنگ تفریح هر دیدار — برنامه با اعلام دبیرخانه تربیت بدنی تنظیم می‌شود</div></div><div class="card-content pt0">';
+  if(!list.length){h+='<div class="empty"><div class="empty-ic">'+icon('calendar')+'</div>بازی برنامه‌ریزی‌شده‌ای باقی نمانده است.</div>';}
+  else{
+    const groups={};list.forEach(g=>{(groups[g.date]=groups[g.date]||[]).push(g);});
+    const dates=Object.keys(groups).sort();
+    h+='<div class="stack-2">'+dates.map(d=>{
+      const isToday=d===todayStr();
+      const j=jOf(d);
+      let day='<div><div class="group-round-title">'
+        +'<span class="badge '+(isToday?'badge-amber':'badge-secondary')+'">'+relDateText(d)+'</span>'
+        +weekdayOf(d)+' '+toFa(j.jd)+' '+J_MONTHS[j.jm-1]+' '+toFa(j.jy)
+        +'</div></div><div class="stack">';
+      groups[d].forEach(g=>{
+        const hm=teamById(g.homeId),am=teamById(g.awayId);
+        const rem=remainingText(g);const passed=gameDatetime(g)<new Date();
+        day+='<div class="match-btn"><div class="match-main">'
+          +'<div class="match-side home">'+teamLogo(hm,28)+'<span class="tname">'+esc(hm.name)+'</span></div>'
+          +'<div class="match-center"><span class="vs-chip">'+toFa(g.time)+'</span><span class="status-sub">'+(passed?'در انتظار ثبت نتیجه':(rem||''))+'</span></div>'
+          +'<div class="match-side">'+teamLogo(am,28)+'<span class="tname">'+esc(am.name)+'</span></div>'
+          +'</div><div class="match-meta">'+metaChip('bell',esc(g.recess||'زنگ تفریح'))+'</div></div>';});
+      day+='</div>';
+      return '<div style="display:grid;gap:.75rem">'+day+'</div>';}).join('')+'</div>';
+  }
+  h+='</div></div>';
+  pg.innerHTML=h;
+}
+
+function renderNews(){
+  const pg=document.getElementById('page-news');
+  let h='<div class="card"><div class="card-header"><div class="card-title">'+icon('info')+'اخبار و اطلاعیه‌های لیگ</div><div class="card-desc">متن‌های رسمی دبیرخانه تربیت بدنی</div></div><div class="card-content pt0">';
+  if(!state.news.length){h+='<div class="empty"><div class="empty-ic">'+icon('info')+'</div>خبری ثبت نشده است.</div>';}
+  else{
+    h+='<div class="news-list">'+state.news.slice().reverse().map(n=>
+      '<div class="news-item"><div class="nic">'+icon('bell')+'</div><div><div class="nt">'+esc(n.text)+'</div><div class="nd">'+fmtJalali(n.date)+' — '+weekdayOf(n.date)+'</div></div></div>').join('')+'</div>';
+  }
+  h+='<div class="sep" style="margin:1rem 0"></div>';
+  h+='<div class="amber-note">'+icon('info')+'نتایج آخرین بازی‌ها، ستاره بازی امروز و برنامه دیدارهای پیش‌رو به‌صورت خودکار در نوار اخبار بالای سایت نمایش داده می‌شود.</div>';
+  h+='</div></div>';
+  pg.innerHTML=h;
+}
+
+function renderAll(){
+  safeRender('home',renderHome);
+  safeRender('standings',renderStandings);
+  safeRender('results',renderResults);
+  safeRender('players',renderPlayers);
+  safeRender('teams',renderTeams);
+  safeRender('schedule',renderSchedule);
+  safeRender('news',renderNews);
+  safeRender('ticker',renderTicker);
+  const fu=document.getElementById('footUpdated');
+  if(fu)fu.textContent=fmtUpdated(state.meta.updated);
+  const hs=document.getElementById('hdSeason');
+  if(hs)hs.textContent=state.settings.season;
+}
+
+/* ═════════════ ۱۰) تیکر و ساعت ═════════════ */
+function buildTickerItems(){
+  const items=[];
+  state.news.slice().reverse().forEach(n=>items.push({text:esc(n.text),dot:'g'}));
+  if(state.settings.showAutoNews){
+    finishedGames().slice(-3).reverse().forEach(g=>{
+      const h=teamById(g.homeId),a=teamById(g.awayId);
+      const w=gameWinner(g);const wn=w&&teamById(w)?teamById(w).name:'';
+      items.push({text:'نتیجه: <b>'+esc(h.name)+' '+toFa(g.homeScore)+' – '+toFa(g.awayScore)+' '+esc(a.name)+'</b>'+(wn?' — برد '+esc(wn):''),dot:'e'});});
+    const tp=todayTopPerformer();
+    if(tp){const p=playerById(tp.playerId);
+      if(p)items.push({text:'ستاره بازی امروز: <b>'+esc(p.name)+'</b> با '+toFa(tp.pts)+' امتیاز',dot:'e'});}
+    gamesOn(todayStr()).filter(g=>g.status==='scheduled').forEach(g=>{
+      const h=teamById(g.homeId),a=teamById(g.awayId);
+      items.push({text:'امروز '+esc(g.recess||'')+' ساعت '+toFa(g.time)+': <b>'+esc(h.name)+' – '+esc(a.name)+'</b>',dot:'w'});});
+    const ng=getNextGame();
+    if(ng&&ng.date!==todayStr()){
+      const h=teamById(ng.homeId),a=teamById(ng.awayId);
+      items.push({text:'بازی بعدی '+relDateText(ng.date)+'، '+weekdayOf(ng.date)+' ساعت '+toFa(ng.time)+': <b>'+esc(h.name)+' – '+esc(a.name)+'</b>',dot:'w'});}
+  }
+  if(!items.length)items.push({text:'به‌زودی اخبار و نتایج لیگ از همین نوار اعلام می‌شود.',dot:'w'});
+  return items;}
+function renderTicker(){
+  const track=document.getElementById('tkTrack');
+  const items=buildTickerItems();
+  const html=items.map(x=>'<span class="tk-item"><span class="tk-dot '+x.dot+'"></span>'+x.text+'</span>').join('');
+  track.innerHTML='<span style="display:flex">'+html+'</span><span style="display:flex">'+html+'</span>';
+  track.style.setProperty('--tks',state.settings.tickerSpeed+'s');}
+function tickClock(){const d=new Date();const c=document.getElementById('tkClock');
+  if(c)c.textContent=toFa(pad2(d.getHours())+':'+pad2(d.getMinutes())+':'+pad2(d.getSeconds()));}
+let cdTimer=null;
+function scheduleCountdown(){
+  if(cdTimer){clearInterval(cdTimer);cdTimer=null;}
+  const g=getNextGame();if(!g)return;
+  const target=gameDatetime(g);
+  const upd=()=>{
+    const ms=target-new Date();
+    const dd=document.getElementById('cdD');
+    if(ms<=0){if(cdTimer){clearInterval(cdTimer);cdTimer=null;}renderHome();renderSchedule();return;}
+    if(!dd)return;
+    dd.textContent=toFa(Math.floor(ms/86400000));
+    const h=document.getElementById('cdH'),m=document.getElementById('cdM'),s=document.getElementById('cdS');
+    if(h)h.textContent=toFa(pad2(Math.floor(ms%86400000/3600000)));
+    if(m)m.textContent=toFa(pad2(Math.floor(ms%3600000/60000)));
+    if(s)s.textContent=toFa(pad2(Math.floor(ms%60000/1000)));};
+  upd();cdTimer=setInterval(upd,1000);}
+
+/* ═════════════ ۱۱) تب‌ها، توست ═════════════ */
+const TAB_META={home:['home','خانه'],standings:['list','جدول لیگ'],results:['check','نتایج'],players:['star','بازیکنان برتر'],teams:['trophy','تیم‌های برتر'],schedule:['calendar','بازی‌های آینده'],news:['info','اخبار']};
+function renderTabs(){
+  document.querySelectorAll('#mainTabs .tabs-trigger').forEach(b=>{
+    const m=TAB_META[b.dataset.tab];
+    b.innerHTML=icon(m[0])+m[1];
+    b.classList.toggle('active',b.dataset.tab===window.__curTab);});}
+window.__curTab='home';
+function switchTab(id){
+  window.__curTab=id;
+  document.querySelectorAll('#mainTabs .tabs-trigger').forEach(b=>b.classList.toggle('active',b.dataset.tab===id));
+  document.querySelectorAll('section[data-page]').forEach(s=>s.hidden=s.dataset.page!==id);}
+function toast(msg,type,actLabel,actFn){
+  const wrap=document.getElementById('toaster');if(!wrap)return;
+  const t=document.createElement('div');
+  t.className='toast'+(type==='destructive'?' destructive':'');
+  t.innerHTML='<div><div class="t-title">'+msg+'</div></div><button class="t-x">'+icon('x')+'</button>'+(actLabel?'<button class="btn btn-sm btn-outline" style="width:fit-content">'+esc(actLabel)+'</button>':'');
+  wrap.appendChild(t);
+  const kill=()=>{t.remove();};
+  t.querySelector('.t-x').addEventListener('click',kill);
+  if(actLabel)t.querySelector('.btn').addEventListener('click',()=>{if(actFn)actFn();kill();});
+  setTimeout(kill,actLabel?8000:4200);}
+
+/* ═════════════ ۱۲) موتور پردازش زبان فارسی ═════════════ */
+const Engine={
+  pending:null,
+  findTeamMentions(n){const out=[];state.teams.forEach(t=>{const name=norm(t.name);if(!name)return;
+    let idx=0;while((idx=n.indexOf(name,idx))!==-1){const b=n[idx-1],a=n[idx+name.length];
+      if(!isFaLetter(b)&&!isFaLetter(a))out.push({team:t,idx});idx+=name.length;}});
+    return out.sort((a,b)=>a.idx-b.idx);},
+  findPlayerMentions(n){const out=[];state.players.forEach(p=>{const name=norm(p.name);if(!name)return;
+    let idx=0;while((idx=n.indexOf(name,idx))!==-1){const b=n[idx-1],a=n[idx+name.length];
+      if(!isFaLetter(b)&&!isFaLetter(a))out.push({player:p,idx});idx+=name.length;}});
+    return out.sort((a,b)=>a.idx-b.idx);},
+  numsPos(n){const out=[];const re=/\d{1,3}/g;let m;while((m=re.exec(n))!==null)out.push({v:+m[0],idx:m.index});return out;},
+  parseDateWord(n){
+    if(/امروز/.test(n))return todayStr();
+    if(/پس ?فردا/.test(n))return todayStr(addDays(new Date(),2));
+    if(/فردا/.test(n))return todayStr(addDays(new Date(),1));
+    if(/پریروز/.test(n))return todayStr(addDays(new Date(),-2));
+    if(/دیروز/.test(n))return todayStr(addDays(new Date(),-1));
+    let m=n.match(/(\d{4})[\/\-.](\d{1,2})[\/\-.](\d{1,2})/);
+    if(m){const a=+m[1],b=+m[2],c=+m[3];if(a>1700)return a+'-'+pad2(b)+'-'+pad2(c);
+      const g=toGregorian(a,b,c);return g.gy+'-'+pad2(g.gm)+'-'+pad2(g.gd);}
+    m=n.match(/(\d{1,2}) (فروردین|اردیبهشت|خرداد|تیر|مرداد|شهریور|مهر|آبان|آذر|دی|بهمن|اسفند)/);
+    if(m){const jm=J_MONTHS.indexOf(m[2])+1;const nowJ=jOf(new Date());let jy=nowJ.jy;if(jm<nowJ.jm)jy++;
+      const g=toGregorian(jy,jm,+m[1]);return g.gy+'-'+pad2(g.gm)+'-'+pad2(g.gd);}
+    const wm={'شنبه':6,'یکشنبه':0,'دوشنبه':1,'سه شنبه':2,'چهارشنبه':3,'پنجشنبه':4,'جمعه':5};
+    for(const w in wm){if(n.includes(w)){const today=new Date().getDay();
+      if(/گذشته|قبل/.test(n)){for(let k=1;k<=7;k++){if(((today-k)%7+7)%7===wm[w])return todayStr(addDays(new Date(),-k));}}
+      for(let k=1;k<=7;k++){if((today+k)%7===wm[w])return todayStr(addDays(new Date(),k));}}}
+    return null;},
+  parseTime(n){const m=n.match(/(\d{1,2}):(\d{2})/);if(m&&+m[1]<24&&+m[2]<60)return pad2(+m[1])+':'+pad2(+m[2]);
+    const m2=n.match(/ساعت (\d{1,2})/);if(m2&&+m2[1]<24)return pad2(+m2[1])+':00';return null;},
+  parseRecess(n){const m=n.match(/زنگ *(?:تفریح)? *(اول|دوم|سوم|چهارم|پنجم)/);if(!m)return null;
+    const map={'اول':0,'دوم':1,'سوم':2,'چهارم':3,'پنجم':4};
+    const rl=state.settings.recessList||[];const idx=map[m[1]]!=null?map[m[1]]:0;
+    return rl[idx]?rl[idx].label:('زنگ تفریح '+m[1]);},
+  recessTime(rl){const r=(state.settings.recessList||[]).find(x=>x.label===rl);return r?r.time:null;},
+  parseLine(raw,ctx,out){
+    let n=norm(raw);if(!n)return;
+    if(/^(تایید|تأیید)/.test(n)&&this.pending){out.push({type:'do-reset'});this.pending=null;return;}
+    if(/بازنشانی|پاکسازی کامل/.test(n)&&/تیم|بازی|همه|کامل/.test(n)){this.pending={type:'reset'};out.push({type:'ask-confirm'});return;}
+    const dw=this.parseDateWord(n);if(dw)ctx.date=dw;
+    const tw=this.parseTime(n);if(tw)ctx.time=tw;
+    const rw=this.parseRecess(n);if(rw)ctx.recess=rw;
+    let m=n.match(/^(?:خبر|اطلاعیه|تیکر|اعلامیه?) *[:]? *(.+)/);
+    if(m&&/خبر|اطلاعیه|تیکر|اعلام/.test(n.slice(0,12))){out.push({type:'news',text:m[1]});return;}
+    m=n.match(/^(?:اسامی |لیست )?(?:تیم ها|تیمها|تیم‌ها) *[:]? *(.+)/);
+    if(m&&/تیم ?ها/.test(n.slice(0,14))){out.push({type:'team-list',names:m[1].split(/[،,؛]/).map(s=>s.trim()).filter(Boolean)});return;}
+    m=n.match(/^(?:تیم جدید|افزودن تیم|ثبت تیم) *[:]? *(.+)/);
+    if(m){out.push({type:'team-add',name:m[1]});return;}
+    m=n.match(/^(?:بازیکن جدید|افزودن بازیکن|ثبت بازیکن|بازیکن) *[:]? *(.+)/);
+    if(m){const body=m[1];const tm=this.findTeamMentions(body)[0];
+      const nm=body.split(/[،,]| تیم /)[0].replace(/ شماره.*/,'').trim();
+      const numM=body.match(/شماره *(\d{1,2})/);
+      const posM=body.match(/گارد راس|گارد شوتینگ|گارد|فوروارد|سنتر|سوئینگمن/);
+      out.push({type:'player-add',name:nm,teamId:tm?tm.team.id:null,number:numM?+numM[1]:0,pos:posM?posM[0]:'بازیکن'});return;}
+    const tms=this.findTeamMentions(n),pls=this.findPlayerMentions(n),nums=this.numsPos(n);
+    let isResult=false;
+    if(tms.length>=2&&nums.length>=2){
+      const a=tms[0],b=tms.find(x=>x.team.id!==a.team.id);
+      if(b){const lo=Math.min(a.idx,b.idx),hi=Math.max(a.idx,b.idx);
+        const between=nums.filter(x=>x.idx>lo&&x.idx<hi&&x.v>=5&&x.v<=200);
+        if(between.length===2)isResult=true;
+        else if(/نتیجه|برد|باخت|پایان یافته/.test(n)){
+          const valid=nums.filter(x=>x.v>=5&&x.v<=200);if(valid.length===2)isResult=true;}}}
+    if(isResult){
+      const a=tms[0],b=tms.find(x=>x.team.id!==a.team.id);
+      const first=a.idx<b.idx?a:b,second=a.idx<b.idx?b:a;
+      const lo=Math.min(first.idx,second.idx),hi=Math.max(first.idx,second.idx);
+      let between=nums.filter(x=>x.idx>lo&&x.idx<hi&&x.v>=5&&x.v<=200);
+      let s1,s2;
+      if(between.length===2){s1=between[0].v;s2=between[1].v;}
+      else{const valid=nums.filter(x=>x.v>=5&&x.v<=200);s1=valid[0].v;s2=valid[1].v;}
+      out.push({type:'result',homeId:first.team.id,awayId:second.team.id,hs:s1,as:s2,date:ctx.date||todayStr(),time:ctx.time,recess:ctx.recess});return;}
+    if(pls.length>=1&&nums.length>=1){
+      const segs=[];pls.forEach((p,i)=>{const end=(i+1<pls.length)?pls[i+1].idx:n.length;segs.push({player:p.player,seg:n.slice(p.idx,end)});});
+      const statLines=[];
+      segs.forEach(s=>{const sn=s.seg;
+        const grab=re=>{const mm=sn.match(re);return mm?+mm[1]:null;};
+        let pts=grab(/(\d{1,3}) *امتیاز/)||grab(/امتیاز *:? *(\d{1,3})/);
+        let reb=grab(/(\d{1,3}) *(?:ریباند|رباند)/)||grab(/(?:ریباند|رباند) *:? *(\d{1,3})/);
+        let ast=grab(/(\d{1,3}) *(?:پاس|اسیست|آسیست)/)||grab(/(?:پاس|اسیست|آسیست) *:? *(\d{1,3})/);
+        if(pts==null&&reb==null&&ast==null){const bare=(sn.match(/\d{1,3}/g)||[]).map(Number);
+          if(bare.length>=3){pts=bare[0];reb=bare[1];ast=bare[2];}else if(bare.length>=1)pts=bare[0];}
+        if(pts!=null||reb!=null||ast!=null)statLines.push({playerId:s.player.id,pts:pts||0,reb:reb||0,ast:ast||0});});
+      if(statLines.length){out.push({type:'stats',lines:statLines});return;}}
+    if(tms.length>=2&&(ctx.date||ctx.time||ctx.recess||/برنامه|مقابل|میزبان|مهمان|بازی/.test(n))){
+      const a=tms[0],b=tms.find(x=>x.team.id!==a.team.id);
+      if(b){out.push({type:'schedule',homeId:a.team.id,awayId:b.team.id,date:ctx.date||todayStr(addDays(new Date(),1)),time:ctx.time,recess:ctx.recess});return;}}
+    if(/^(سلام|درود|وقت بخیر)/.test(n)){out.push({type:'greet'});return;}
+    if(/راهنما|کمک|دستورات|چطور/.test(n)){out.push({type:'help'});return;}
+    if(/جدول|رتبه بندی/.test(n)){out.push({type:'q-standings'});return;}
+    if(/(بهترین|برترین).*بازیکن|بازیکن.*(بهترین|برترین)|پرامتیاز/.test(n)){out.push({type:'q-players'});return;}
+    if(/(بهترین|برترین).*تیم|تیم.*(بهترین|برترین)/.test(n)){out.push({type:'q-teams'});return;}
+    if(/بازی بعدی|برنامه بازی|بازی های آینده/.test(n)){out.push({type:'q-next'});return;}
+    if(/آمار لیگ|وضعیت لیگ|خلاصه/.test(n)){out.push({type:'q-summary'});return;}
+    out.push({type:'miss',raw});},
+  apply(action,ctx,changed){
+    const R=[];
+    switch(action.type){
+      case 'news':state.news.push({id:uid('n'),text:action.text,date:todayStr()});changed.v=true;
+        R.push('<div class="msg-line">'+icon('info')+'خبر جدید در تیکر ثبت شد: «'+esc(action.text)+'»</div>');break;
+      case 'team-list':{let c=0;action.names.forEach(nm=>{nm=nm.replace(/^و /,'').trim();if(!nm)return;
+        if(!state.teams.some(t=>norm(t.name)===norm(nm))){state.teams.push(mkTeam(uid('t'),nm,nm.slice(0,2),PALETTE[state.teams.length%PALETTE.length]));c++;}});
+        changed.v=true;R.push('<div class="msg-line">'+icon('users')+'<b>'+toFa(c)+'</b> تیم جدید اضافه شد (مجموع: '+toFa(state.teams.length)+')</div>');break;}
+      case 'team-add':{const nm=action.name.trim();
+        if(nm&&!state.teams.some(t=>norm(t.name)===norm(nm))){
+          state.teams.push(mkTeam(uid('t'),nm,nm.slice(0,2),PALETTE[state.teams.length%PALETTE.length]));
+          changed.v=true;R.push('<div class="msg-line">'+icon('users')+'تیم «<b>'+esc(nm)+'»</b> ساخته شد.</div>');}
+        else R.push('<div class="msg-line">'+icon('warn')+'این تیم قبلاً ثبت شده یا نام آن معتبر نیست.</div>');break;}
+      case 'player-add':{
+        if(!action.name||action.name.length<3){R.push('<div class="msg-line">'+icon('warn')+'نام بازیکن معتبر نیست.</div>');break;}
+        const team=action.teamId?teamById(action.teamId):null;
+        state.players.push(mkP(uid('p'),action.name,team?team.id:(state.teams[0]?state.teams[0].id:''),action.number||0,action.pos));
+        changed.v=true;R.push('<div class="msg-line">'+icon('star')+'بازیکن «<b>'+esc(action.name)+'»</b>'+(team?' برای تیم '+esc(team.name):'')+' ثبت شد.</div>');break;}
+      case 'result':{
+        const h=teamById(action.homeId),a=teamById(action.awayId);
+        if(action.hs===action.as){R.push('<div class="msg-line">'+icon('warn')+'در بسکتبال مساوی نداریم؛ امتیازها یکسان است.</div>');break;}
+        let g=state.games.find(x=>x.status==='scheduled'&&((x.homeId===action.homeId&&x.awayId===action.awayId)||(x.homeId===action.awayId&&x.awayId===action.homeId)));
+        if(g){if(g.homeId!==action.homeId){g.homeScore=action.as;g.awayScore=action.hs;}else{g.homeScore=action.hs;g.awayScore=action.as;}
+          g.status='finished';g.date=action.date;if(action.time)g.time=action.time;if(action.recess)g.recess=action.recess;}
+        else{g={id:uid('g'),date:action.date,time:action.time||(action.recess?this.recessTime(action.recess):null)||'09:45',
+          recess:action.recess||(state.settings.recessList[0]||{}).label||'زنگ تفریح',
+          homeId:action.homeId,awayId:action.awayId,homeScore:action.hs,awayScore:action.as,status:'finished',stats:[]};
+          state.games.push(g);}
+        ctx.lastGameId=g.id;changed.v=true;
+        const winner=action.hs>action.as?h:a;
+        R.push('<div class="msg-line">'+icon('ball')+'نتیجه ثبت شد: <b>'+toFa(action.hs)+' – '+toFa(action.as)+'</b> '+esc(h.name)+' – '+esc(a.name)+'</div>');
+        R.push('<div class="msg-line">'+icon('trophy')+'برنده: <b>'+esc(winner.name)+'</b> | '+relDateText(action.date)+'، '+weekdayOf(action.date)+(action.recess?'، '+esc(action.recess):'')+'</div>');
+        R.push('<div class="msg-line msg-ok">'+icon('check')+'جدول، رتبه‌بندی‌ها و تیکر خودکار به‌روزرسانی شد.</div>');
+        R.push('<div class="msg-line">'+icon('info')+'آمار بازیکنان را همین‌جا بنویسید؛ مثال: <mini>آرمان رضایی ۱۸ امتیاز ۷ ریباند ۴ پاس</mini></div>');break;}
+      case 'stats':{
+        let g=ctx.lastGameId?state.games.find(x=>x.id===ctx.lastGameId):null;
+        let applied=0,skipped=0;
+        action.lines.forEach(ln=>{
+          const p=playerById(ln.playerId);if(!p){skipped++;return;}
+          let tg=g;
+          if(!tg||tg.status!=='finished'||(tg.homeId!==p.teamId&&tg.awayId!==p.teamId)){
+            const cands=finishedGames().filter(x=>x.homeId===p.teamId||x.awayId===p.teamId);
+            tg=cands.length?cands[cands.length-1]:null;}
+          if(!tg){skipped++;return;}
+          tg.stats=tg.stats||[];
+          const ex=tg.stats.find(s=>s.playerId===p.id);
+          if(ex){ex.pts=ln.pts;ex.reb=ln.reb;ex.ast=ln.ast;}else tg.stats.push(ln);
+          applied++;
+          R.push('<div class="msg-line">'+icon('star')+esc(p.name)+': <b>'+toFa(ln.pts)+'</b> امتیاز، <b>'+toFa(ln.reb)+'</b> ریباند، <b>'+toFa(ln.ast)+'</b> پاس</div>');});
+        if(applied)changed.v=true;
+        if(skipped)R.push('<div class="msg-line">'+icon('warn')+toFa(skipped)+' مورد یافت نشد (بازیکن یا بازی متناظر ثبت نیست).</div>');break;}
+      case 'schedule':{
+        const h=teamById(action.homeId),a=teamById(action.awayId);
+        const dup=state.games.find(x=>x.status==='scheduled'&&x.date===action.date&&((x.homeId===action.homeId&&x.awayId===action.awayId)||(x.homeId===action.awayId&&x.awayId===action.homeId)));
+        if(dup){R.push('<div class="msg-line">'+icon('warn')+'این بازی برای همین روز قبلاً ثبت شده است.</div>');break;}
+        const recess=action.recess||(state.settings.recessList[0]||{}).label||'زنگ تفریح';
+        const time=action.time||this.recessTime(recess)||'09:45';
+        state.games.push({id:uid('g'),date:action.date,time,recess,homeId:action.homeId,awayId:action.awayId,homeScore:null,awayScore:null,status:'scheduled',stats:[]});
+        changed.v=true;
+        R.push('<div class="msg-line">'+icon('calendar')+'بازی برنامه‌ریزی شد: <b>'+esc(h.name)+' – '+esc(a.name)+'</b></div>');
+        R.push('<div class="msg-line">'+icon('clock')+fmtJalali(action.date,true)+' | ساعت '+toFa(time)+' | '+esc(recess)+'</div>');
+        R.push('<div class="msg-line msg-ok">'+icon('check')+'در بخش «بازی‌های آینده» نمایش داده می‌شود.</div>');break;}
+      case 'greet':R.push('<div class="msg-line">'+icon('sparkle')+'سلام مدیر محترم! نتایج، برنامه بازی‌ها، آمار بازیکنان یا خبر تیکر را بنویسید تا همه‌چیز خودکار به‌روزرسانی شود.</div>');
+        R.push('<div class="msg-line">'+icon('info')+'نمونه دستورها: <b>راهنما</b></div>');break;
+      case 'help':R.push('<div class="msg-line"><b>راهنمای سریع دستیار:</b></div>');
+        ['ثبت نتیجه: <mini>نتیجه زنگ اول: آذرخش ۵۸ - ۵۰ طوفان</mini>',
+         'آمار بازیکن: <mini>آرمان رضایی ۲۱ امتیاز ۸ ریباند ۴ پاس</mini>',
+         'بازی برنامه‌ای: <mini>فردا ساعت ۹:۴۵ زنگ اول، شهاب مقابل عقاب</mini>',
+         'خبر تیکر: <mini>خبر: فینال هفته آینده برگزار می‌شود</mini>',
+         'افزودن تیم: <mini>تیم جدید: اژدها</mini>',
+         'افزودن بازیکن: <mini>بازیکن: رضا احمدی، طوفان، شماره ۹</mini>',
+         'پرسش: <mini>جدول</mini>، <mini>بهترین بازیکن</mini>، <mini>بازی بعدی</mini>']
+        .forEach(x=>R.push('<div class="msg-line">'+icon('arrow')+x+'</div>'));break;
+      case 'q-standings':{const rows=computeStandings();
+        R.push('<div class="msg-line"><b>جدول فعلی لیگ:</b></div>');
+        rows.forEach((r,i)=>R.push('<div class="msg-line"><mini>'+toFa(i+1)+'.</mini> <b>'+esc(r.team.name)+'</b> — '+toFa(r.w)+' برد، '+toFa(r.l)+' باخت</div>'));break;}
+      case 'q-players':{const list=playerLeaderboard('pts','all').list.slice(0,5);
+        R.push('<div class="msg-line"><b>پرامتیازترین بازیکنان:</b></div>');
+        list.forEach((m,i)=>{const t=teamById(m.player.teamId);
+          R.push('<div class="msg-line"><mini>'+toFa(i+1)+'.</mini> <b>'+esc(m.player.name)+'</b> ('+esc(t?t.name:'')+') — میانگین '+faNum(m.avgPts,1)+'</div>');});break;}
+      case 'q-teams':{const ranks=teamPowerRanking().slice(0,5);
+        R.push('<div class="msg-line"><b>قوی‌ترین تیم‌ها:</b></div>');
+        ranks.forEach((r,i)=>R.push('<div class="msg-line"><mini>'+toFa(i+1)+'.</mini> <b>'+esc(r.team.name)+'</b> — '+faNum(Math.round(r.pct*100))+'٪ برد</div>'));break;}
+      case 'q-next':{const list=scheduledGames().slice(0,5);
+        if(!list.length)R.push('<div class="msg-line">'+icon('info')+'بازی برنامه‌ریزی‌شده‌ای باقی نمانده است.</div>');
+        else{R.push('<div class="msg-line"><b>بازی‌های پیش‌رو:</b></div>');
+          list.forEach(g=>{const h=teamById(g.homeId),a=teamById(g.awayId);
+            R.push('<div class="msg-line">'+icon('calendar')+esc(h.name)+' – '+esc(a.name)+' | '+fmtJalali(g.date,true)+'، ساعت '+toFa(g.time)+'</div>');});}break;}
+      case 'q-summary':R.push('<div class="msg-line">'+icon('chart')+'تیم‌ها: <b>'+toFa(state.teams.length)+'</b> | بازیکنان: <b>'+toFa(state.players.length)+'</b> | بازی‌های انجام‌شده: <b>'+toFa(finishedGames().length)+'</b> | پیش‌رو: <b>'+toFa(scheduledGames().length)+'</b></div>');break;
+      case 'ask-confirm':R.push('<div class="msg-line">'+icon('warn')+'تمام داده‌ها به حالت اولیه بازمی‌گردند. برای تأیید بنویسید: <b>تأیید</b></div>');break;
+      case 'do-reset':state=buildSeed();changed.v=true;
+        R.push('<div class="msg-line msg-ok">'+icon('check')+'بازنشانی انجام شد.</div>');break;
+      case 'miss':R.push('<div class="msg-line">'+icon('warn')+'این خط را درنیافتم: «'+esc(action.raw.slice(0,60))+'» — بنویسید: <b>راهنما</b></div>');break;
+    }
+    return R;},
+  handle(text){
+    const lines=text.split(/\n+/).map(s=>s.trim()).filter(Boolean);
+    const ctx={date:null,time:null,recess:null,lastGameId:null};
+    const changed={v:false};let html='',actions=0;
+    lines.forEach(line=>{const out=[];this.parseLine(line,ctx,out);
+      out.forEach(a=>{actions++;html+=this.apply(a,ctx,changed);});});
+    if(!actions)html+='<div class="msg-line">'+icon('warn')+'دستوری دریافت نشد. بنویسید: <b>راهنما</b></div>';
+    if(changed.v){commit(true);
+      html+=Cloud.live()
+        ?'<div class="msg-line msg-ok">'+icon('check')+'تغییرات به‌صورت زنده برای همه ارسال شد.</div>'
+        :'<div class="msg-line">'+icon('link')+'برای اطلاع همه، حالت آنلاین را از تب «داده و حالت آنلاین» فعال کنید.</div>';}
+    return html;}
+};
+
+/* ═════════════ ۱۳) ورود مدیریت ═════════════ */
+function isAuthed(){try{return sessionStorage.getItem('sampad_admin')==='1';}catch(e){return false;}}
+function setAuth(v){try{if(v)sessionStorage.setItem('sampad_admin','1');else sessionStorage.removeItem('sampad_admin');}catch(e){}}
+function openLogin(){document.getElementById('loginOverlay').hidden=false;
+  document.getElementById('loginDialog').hidden=false;
+  document.getElementById('loginErr').hidden=true;
+  const inp=document.getElementById('pwInput');inp.value='';setTimeout(()=>inp.focus(),60);}
+function closeLogin(){document.getElementById('loginOverlay').hidden=true;document.getElementById('loginDialog').hidden=true;}
+function tryLogin(){
+  const v=document.getElementById('pwInput').value.trim();
+  if(v===state.settings.password){setAuth(true);closeLogin();openAdmin();
+    document.getElementById('adminTrigger').classList.add('authed');
+    toast('خوش آمدید؛ وارد پنل مدیریت شدید');}
+  else{document.getElementById('loginErr').hidden=false;document.getElementById('pwInput').select();}}
+function logout(){setAuth(false);closeAdmin();
+  document.getElementById('adminTrigger').classList.remove('authed');
+  toast('از پنل مدیریت خارج شدید');}
+
+/* ═════════════ ۱۴) پنل مدیریت ═════════════ */
+let adminOpen=false;
+const adminUI={tab:'dash',editingTeam:null,resultFor:null,newGameOpen:false,linkOut:'',confirmDel:null};
+const TABS=[
+  {id:'dash',label:'داشبورد',icon:'chart'},
+  {id:'chat',label:'دستیار هوشمند',icon:'sparkle'},
+  {id:'roster',label:'تیم‌ها و بازیکنان',icon:'users'},
+  {id:'games',label:'بازی‌ها و نتایج',icon:'ball'},
+  {id:'news',label:'اخبار تیکر',icon:'list'},
+  {id:'data',label:'داده و حالت آنلاین',icon:'refresh'},
+  {id:'settings',label:'تنظیمات',icon:'sliders'}];
+function openAdmin(){adminOpen=true;document.getElementById('adminPanel').hidden=false;
+  document.body.style.overflow='hidden';renderAdminSide();renderAdminTab();}
+function closeAdmin(){adminOpen=false;document.getElementById('adminPanel').hidden=true;document.body.style.overflow='';}
+function updateSaveChip(){const c=document.getElementById('adSaveChip');if(!c)return;
+  c.textContent='ذخیره: '+fmtUpdated(state.meta.updated)+(Cloud.live()?' | ابری متصل':'');}
+function renderAdminSide(){
+  document.getElementById('adSide').innerHTML=TABS.map(t=>{
+    let cnt='';
+    if(t.id==='chat'&&chatMsgs.length)cnt='<span class="cnt">'+toFa(chatMsgs.length)+'</span>';
+    if(t.id==='games')cnt='<span class="cnt">'+toFa(state.games.length)+'</span>';
+    if(t.id==='roster')cnt='<span class="cnt">'+toFa(state.teams.length)+'</span>';
+    if(t.id==='news')cnt='<span class="cnt">'+toFa(state.news.length)+'</span>';
+    return '<button class="admin-tab '+(adminUI.tab===t.id?'active':'')+'" data-act="tab" data-tab="'+t.id+'">'+icon(t.icon)+t.label+cnt+'</button>';}).join('');}
+function renderAdminTab(){
+  renderAdminSide();
+  const t=adminUI.tab;
+  if(t==='dash')document.getElementById('adminMain').innerHTML=tabDash();
+  else if(t==='chat'){document.getElementById('adminMain').innerHTML=tabChat();mountChat();}
+  else if(t==='roster')document.getElementById('adminMain').innerHTML=tabRoster();
+  else if(t==='games')document.getElementById('adminMain').innerHTML=tabGames();
+  else if(t==='news')document.getElementById('adminMain').innerHTML=tabNewsAdmin();
+  else if(t==='data')document.getElementById('adminMain').innerHTML=tabData();
+  else if(t==='settings')document.getElementById('adminMain').innerHTML=tabSettings();}
+function tabDash(){
+  const f=finishedGames(),s=scheduledGames(),next=getNextGame();
+  let h='<div class="ad-h"><div><h2>داشبورد مدیریت</h2><p>'+esc(state.settings.season)+'</p></div>'+Cloud.badge()+'</div>';
+  h+='<div class="tiles">'
+    +'<div class="tile"><div class="tile-ic">'+icon('users')+'</div><div><div class="tile-val">'+toFa(state.teams.length)+'</div><div class="tile-label">تیم</div></div></div>'
+    +'<div class="tile"><div class="tile-ic">'+icon('star')+'</div><div><div class="tile-val">'+toFa(state.players.length)+'</div><div class="tile-label">بازیکن</div></div></div>'
+    +'<div class="tile"><div class="tile-ic">'+icon('check')+'</div><div><div class="tile-val">'+toFa(f.length)+'</div><div class="tile-label">بازی انجام‌شده</div></div></div>'
+    +'<div class="tile"><div class="tile-ic">'+icon('calendar')+'</div><div><div class="tile-val">'+toFa(s.length)+'</div><div class="tile-label">بازی پیش‌رو</div></div></div>'
+    +'</div><div style="height:1rem"></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('bolt')+'اقدام‌های سریع</div></div><div class="card-content pt0"><div class="form-row">'
+    +'<button class="btn btn-default btn-sm" data-act="go-chat">'+icon('sparkle')+'ثبت نتایج با دستیار</button>'
+    +'<button class="btn btn-outline btn-sm" data-act="go-games">'+icon('ball')+'مدیریت بازی‌ها</button>'
+    +'<button class="btn btn-outline btn-sm" data-act="go-cloud">'+icon('bolt')+(Cloud.live()?'وضعیت حالت آنلاین':'فعال‌سازی حالت آنلاین')+'</button>'
+    +'<button class="btn btn-outline btn-sm" data-act="export">'+icon('download')+'پشتیبان‌گیری</button>'
+    +'</div></div></div>';
+  if(next){const h2=teamById(next.homeId),a2=teamById(next.awayId);
+    h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('clock')+'نزدیک‌ترین بازی</div></div><div class="card-content pt0"><div class="lrow" style="border:0">'
+      +teamLogo(h2,26)+'<b>'+esc(h2.name)+' — '+esc(a2.name)+'</b>'
+      +'<span class="badge badge-outline">'+fmtJalali(next.date,true)+'</span>'
+      +'<span class="badge badge-emerald">ساعت '+toFa(next.time)+'</span>'
+      +'<span class="badge badge-secondary">'+esc(next.recess||'')+'</span>'
+      +'</div></div></div>';}
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('info')+'راهنمای روال روزانه</div></div><div class="card-content pt0"><div class="sync-box">'
+    +'۱) پس از پایان بازی‌ها به تب <b>دستیار هوشمند</b> بروید و نتایج را بنویسید — مثال: <b>نتیجه زنگ اول: آذرخش ۵۸ - ۵۰ طوفان</b>.<br>'
+    +'۲) آمار بازیکنان را در همان چت وارد کنید تا «بازیکنان برتر» به‌روز شود.<br>'
+    +(Cloud.live()
+      ?'۳) حالت آنلاین فعال است: هر تغییر حداکثر تا ۲۰ ثانیه بعد برای همه اعمال می‌شود؛ هیچ فایل یا لینکی لازم نیست.'
+      :'۳) برای اعمال تغییرات بدون ارسال فایل جدید، از تب <b>داده و حالت آنلاین</b> حالت آنلاین را یک‌بار فعال کنید.')
+    +'</div></div></div>';
+  return h;}
+function teamOpts(){return state.teams.map(t=>'<option value="'+t.id+'">'+esc(t.name)+'</option>').join('');}
+function tabRoster(){
+  let h='<div class="ad-h"><div><h2>تیم‌ها و بازیکنان</h2><p>مدیریت ترکیب تیم‌ها</p></div>'
+    +'<button class="btn btn-default btn-sm" data-act="toggle-new-team">'+icon('plus')+'تیم جدید</button></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('users')+'تیم‌ها <span class="cnt text-muted">('+toFa(state.teams.length)+')</span></div></div><div class="card-content pt0">';
+  h+=state.teams.map(t=>{
+    if(adminUI.editingTeam===t.id){
+      return '<div class="form-grid cols-3" style="background:var(--accent);border-radius:calc(var(--radius) - 2px);padding:.75rem;margin-bottom:.5rem" data-team="'+t.id+'">'
+        +'<div class="field"><label class="label">نام تیم</label><input class="input e-t-name" value="'+esc(t.name)+'"></div>'
+        +'<div class="field"><label class="label">نشان کوتاه</label><input class="input e-t-short" maxlength="3" value="'+esc(t.short)+'"></div>'
+        +'<div class="field"><label class="label">رنگ</label><input class="input e-t-color" type="color" value="'+t.color+'" style="height:2.25rem;padding:.15rem"></div>'
+        +'<div class="form-row"><button class="btn btn-default btn-sm" data-act="save-team" data-id="'+t.id+'">'+icon('check')+'ذخیره</button>'
+        +'<button class="btn btn-outline btn-sm" data-act="cancel-team">'+icon('x')+'انصراف</button></div></div>';}
+    return '<div class="lrow">'+teamLogo(t,30)
+      +'<div class="grow"><b>'+esc(t.name)+'</b><div class="sub">'+toFa(playersOf(t.id).length)+' بازیکن</div></div>'
+      +'<div class="acts">'
+      +'<button class="btn btn-icon btn-ghost" data-act="edit-team" data-id="'+t.id+'" title="ویرایش">'+icon('edit')+'</button>'
+      +'<button class="btn btn-icon btn-ghost" style="color:var(--destructive)" data-act="del-team" data-id="'+t.id+'" title="حذف">'+icon('trash')+'</button>'
+      +'</div></div>';}).join('');
+  h+='<div id="newTeamWrap"'+(adminUI.newGameOpen==='team'?'':' hidden')+'>'
+    +'<div class="form-grid cols-4" style="background:var(--accent);border-radius:calc(var(--radius) - 2px);padding:.75rem;margin-top:.5rem">'
+    +'<div class="field"><label class="label">نام تیم</label><input class="input" id="ntName" placeholder="مثلاً اژدها"></div>'
+    +'<div class="field"><label class="label">نشان کوتاه</label><input class="input" id="ntShort" maxlength="3" placeholder="اژ"></div>'
+    +'<div class="field"><label class="label">رنگ</label><input class="input" type="color" id="ntColor" value="#EA580C" style="height:2.25rem;padding:.15rem"></div>'
+    +'<div class="field"><label class="label">&nbsp;</label><button class="btn btn-default btn-sm" data-act="add-team">'+icon('plus')+'افزودن</button></div>'
+    +'</div></div>';
+  h+='</div></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('star')+'بازیکنان <span class="cnt text-muted">('+toFa(state.players.length)+')</span></div></div><div class="card-content pt0">';
+  h+='<div class="form-grid cols-4" style="margin-bottom:1rem">'
+    +'<div class="field"><label class="label">نام و نام خانوادگی</label><input class="input" id="npName" placeholder="مثلاً رضا احمدی"></div>'
+    +'<div class="field"><label class="label">تیم</label><select class="input" id="npTeam">'+teamOpts()+'</select></div>'
+    +'<div class="field"><label class="label">شماره</label><input class="input" id="npNum" type="number" min="0" max="99"></div>'
+    +'<div class="field"><label class="label">پست</label><select class="input" id="npPos">'+['گارد رأس','گارد شوتینگ','سوئینگمن','فوروارد','سنتر'].map(p=>'<option>'+p+'</option>').join('')+'</select></div>'
+    +'</div><button class="btn btn-default btn-sm" data-act="add-player">'+icon('plus')+'ثبت بازیکن</button><div style="height:.75rem"></div>';
+  const stats=computePlayerStats();
+  h+=state.players.map(p=>{const t=teamById(p.teamId);
+    const st=stats.find(s=>s.player.id===p.id);
+    return '<div class="lrow"><span class="rank-circle rank-rest">'+toFa(p.number)+'</span>'
+      +'<div class="grow"><b>'+esc(p.name)+'</b><div class="sub">'+esc(p.pos)+' | '+esc(t?t.name:'بدون تیم')
+      +(st?' | میانگین '+faNum(st.avgPts,1)+' امتیاز':'')+'</div></div>'
+      +'<div class="acts"><button class="btn btn-icon btn-ghost" style="color:var(--destructive)" data-act="del-player" data-id="'+p.id+'" title="حذف">'+icon('trash')+'</button></div></div>';}).join('');
+  h+='</div></div>';
+  return h;}
+function tabGames(){
+  let h='<div class="ad-h"><div><h2>بازی‌ها و نتایج</h2><p>ثبت برنامه و نتیجه هر دیدار</p></div>'
+    +'<button class="btn btn-default btn-sm" data-act="toggle-new-game">'+icon('plus')+'بازی جدید</button></div>';
+  h+='<div class="card"'+(adminUI.newGameOpen?'':' hidden')+'>';
+  h+='<div class="card-header"><div class="card-title">'+icon('calendar')+'تعریف بازی جدید</div></div><div class="card-content pt0">'
+    +'<div class="form-grid cols-4">'
+    +'<div class="field"><label class="label">تیم میزبان</label><select class="input" id="ngHome">'+teamOpts()+'</select></div>'
+    +'<div class="field"><label class="label">تیم مهمان</label><select class="input" id="ngAway">'+teamOpts()+'</select></div>'
+    +'<div class="field"><label class="label">تاریخ</label><input class="input ltr" type="date" id="ngDate" value="'+todayStr(addDays(new Date(),1))+'"></div>'
+    +'<div class="field"><label class="label">ساعت</label><input class="input ltr" type="time" id="ngTime" value="09:45"></div>'
+    +'<div class="field"><label class="label">زنگ تفریح</label><select class="input" id="ngRecess">'
+    +state.settings.recessList.map(r=>'<option value="'+esc(r.label)+'">'+esc(r.label)+' — '+toFa(r.time)+'</option>').join('')+'</select></div>'
+    +'<div class="field"><label class="label">&nbsp;</label><button class="btn btn-default btn-sm" data-act="save-new-game">'+icon('check')+'ثبت در برنامه</button></div>'
+    +'</div></div></div>';
+  const list=state.games.slice().sort((a,b)=>(b.date+b.time).localeCompare(a.date+a.time));
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('ball')+'همه بازی‌ها <span class="cnt text-muted">('+toFa(list.length)+')</span></div></div><div class="card-content pt0">';
+  const now=new Date();
+  list.forEach(g=>{
+    const hm=teamById(g.homeId),am=teamById(g.awayId);
+    if(!hm||!am)return;
+    const passed=gameDatetime(g)<now;
+    const cls=g.status==='finished'?'done':(passed?'wait':'next');
+    const stTxt=g.status==='finished'?'پایان یافته':(passed?'در انتظار نتیجه':'برنامه‌ریزی‌شده');
+    h+='<div class="gm-card '+cls+'"><div class="gm-head">'
+      +teamLogo(hm,24)+'<b>'+esc(hm.name)+'</b><span class="text-muted">–</span><b>'+esc(am.name)+'</b>'+teamLogo(am,24)
+      +(g.status==='finished'?'<span class="gm-score ltr">'+toFa(g.homeScore)+' – '+toFa(g.awayScore)+'</span>':'<span class="text-muted">در انتظار</span>')
+      +'<span class="grow"></span>'
+      +'<span class="badge badge-outline">'+fmtJalali(g.date)+'</span>'
+      +'<span class="badge badge-secondary">'+toFa(g.time)+'</span>'
+      +'<span class="badge badge-secondary">'+esc(g.recess||'')+'</span>'
+      +'<span class="st-badge '+(g.status==='finished'?'st-live':'st-wait')+'"'+(g.status==='finished'?'':' style="background:var(--primary-soft);color:var(--badge-orange-fg)"')+'>'+stTxt+'</span>'
+      +'<div class="acts">'
+      +'<button class="btn btn-icon btn-ghost" data-act="open-result" data-id="'+g.id+'" title="ثبت/ویرایش نتیجه">'+icon('edit')+'</button>'
+      +'<button class="btn btn-icon btn-ghost" style="color:var(--destructive)" data-act="del-game" data-id="'+g.id+'" title="حذف">'+icon('trash')+'</button>'
+      +'</div></div>'
+      +(adminUI.resultFor===g.id?resultEditorHtml(g):'')
+      +'</div>';});
+  h+='</div></div>';
+  return h;}
+function resultEditorHtml(g){
+  const hm=teamById(g.homeId),am=teamById(g.awayId);
+  let rows='<div class="stat-grid">';
+  [hm,am].forEach(t=>{
+    rows+='<div><div class="mini-h" style="margin-bottom:.5rem;display:flex;align-items:center;gap:.4rem">'+teamLogo(t,20)+esc(t.name)+'</div>'
+      +'<div class="st-line"><span></span><span class="st-head">امتیاز</span><span class="st-head">ریباند</span><span class="st-head">پاس</span></div>';
+    playersOf(t.id).forEach(p=>{
+      const ex=(g.stats||[]).find(s=>s.playerId===p.id);
+      rows+='<div class="st-line"><span>'+toFa(p.number)+'. '+esc(p.name)+'</span>'
+        +'<input class="input sm-n ste" type="number" min="0" max="99" data-pid="'+p.id+'" data-k="pts" value="'+(ex?ex.pts:0)+'">'
+        +'<input class="input sm-n ste" type="number" min="0" max="99" data-pid="'+p.id+'" data-k="reb" value="'+(ex?ex.reb:0)+'">'
+        +'<input class="input sm-n ste" type="number" min="0" max="99" data-pid="'+p.id+'" data-k="ast" value="'+(ex?ex.ast:0)+'">'
+        +'</div>';});
+    rows+='</div>';});
+  rows+='</div>';
+  return '<div style="border-top:1px dashed var(--border);margin-top:.75rem;padding-top:1rem">'
+    +'<div class="scorebox">'
+    +'<input class="input score" type="number" min="0" max="200" id="reHome" value="'+(g.homeScore!=null?g.homeScore:'')+'" placeholder="0">'
+    +'<span class="text-muted" style="font-size:.75rem;font-weight:700">امتیاز '+esc(hm.name)+' — '+esc(am.name)+'</span>'
+    +'<input class="input score" type="number" min="0" max="200" id="reAway" value="'+(g.awayScore!=null?g.awayScore:'')+'" placeholder="0">'
+    +'</div>'+rows
+    +'<div class="form-row" style="margin-top:1rem">'
+    +'<button class="btn btn-default btn-sm" data-act="save-result" data-id="'+g.id+'">'+icon('check')+'ثبت نتیجه و آمار</button>'
+    +'<button class="btn btn-outline btn-sm" data-act="close-result">'+icon('x')+'بستن</button>'
+    +'</div></div>';}
+function tabNewsAdmin(){
+  let h='<div class="ad-h"><div><h2>اخبار تیکر</h2><p>متن‌های زیرنویس بالای سایت</p></div></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('plus')+'خبر جدید</div></div><div class="card-content pt0">'
+    +'<div class="field"><label class="label">متن خبر</label><textarea class="input" id="newsText" placeholder="مثلاً: دیدار هفته آینده در زنگ تفریح دوم برگزار می‌شود"></textarea></div>'
+    +'<div class="form-row" style="margin-top:.75rem">'
+    +'<button class="btn btn-default btn-sm" data-act="add-news">'+icon('send')+'افزودن به تیکر</button>'
+    +'<label class="ck-label" style="margin-inline-start:auto"><input type="checkbox" id="autoNewsChk" '+(state.settings.showAutoNews?'checked':'')+'> نمایش خودکار نتایج و ستاره بازی در تیکر</label>'
+    +'</div></div></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('list')+'اخبار ثبت‌شده <span class="cnt text-muted">('+toFa(state.news.length)+')</span></div></div><div class="card-content pt0">';
+  h+=state.news.slice().reverse().map(n=>
+    '<div class="lrow"><div class="grow"><b style="font-weight:600;font-size:.8125rem">'+esc(n.text)+'</b><div class="sub">'+fmtJalali(n.date)+'</div></div>'
+    +'<div class="acts"><button class="btn btn-icon btn-ghost" style="color:var(--destructive)" data-act="del-news" data-id="'+n.id+'" title="حذف">'+icon('trash')+'</button></div></div>').join('')
+    ||'<div class="empty dashed">خبری ثبت نشده است.</div>';
+  h+='</div></div>';
+  return h;}
+function tabData(){
+  let size=0;try{size=Math.round((localStorage.getItem(STORAGE_KEY)||'').length/1024*10)/10;}catch(e){}
+  let h='<div class="ad-h"><div><h2>داده و حالت آنلاین</h2><p>به‌روزرسانی زنده برای همه، بدون ارسال فایل جدید</p></div>'+Cloud.badge()+'</div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('bolt')+'حالت آنلاین (همگام‌سازی زنده)</div></div><div class="card-content pt0">';
+  if(Cloud.lastErr)h+='<div class="error-box" style="margin-bottom:.75rem">'+esc(Cloud.lastErr)+'</div>';
+  if(Cloud.live()){
+    h+='<div class="sync-box">اتصال زنده فعال است. هر تغییری در پنل حداکثر تا <b>حدود ۲۰ ثانیه</b> بعد روی سایتِ همه اعمال می‌شود — بدون ارسال فایل یا لینک. برای اتصال خودکار بازدیدکننده‌های تازه، کد ابری را در متغیر <b>CLOUD_CODE_DEFAULT</b> ابتدای اسکریپت جای‌گذاری کنید.</div>'
+      +'<div class="form-grid cols-2" style="margin-top:.75rem">'
+      +'<div class="field"><label class="label">کد ابری این سایت</label><input class="input ltr" readonly value="'+esc(Cloud.code())+'"></div>'
+      +'<div class="field"><label class="label">لینک اتصال (یک‌بار در کانال مدرسه بفرستید)</label><input class="input ltr" readonly value="'+esc(buildConnectLink())+'"></div>'
+      +'</div><div class="form-row" style="margin-top:.75rem">'
+      +'<button class="btn btn-outline btn-sm" data-act="cloud-copy">'+icon('share')+'کپی لینک اتصال</button>'
+      +'<button class="btn btn-outline btn-sm" data-act="cloud-push">'+icon('upload')+'ارسال فوری</button>'
+      +'<button class="btn btn-outline btn-sm" data-act="cloud-pull">'+icon('download')+'دریافت فوری</button>'
+      +'<button class="btn btn-destructive-o btn-sm" data-act="cloud-off">'+icon('x')+'قطع اتصال</button>'
+      +'</div>'
+      +(Cloud.lastSync?'<div class="hint" style="margin-top:.5rem">آخرین همگام‌سازی موفق: <b>'+toFa(pad2(Cloud.lastSync.getHours())+':'+pad2(Cloud.lastSync.getMinutes()))+'</b></div>':'');
+  }else{
+    h+='<div class="sync-box">با فعال‌کردن حالت آنلاین، نتایج ثبت‌شده در پنل به‌صورت <b>زنده</b> روی سایتِ همه اعمال می‌شود — بدون ارسال دوباره فایل. فقط <b>یک‌بار</b> لازم است «لینک اتصال» را در کانال مدرسه بفرستید؛ از آن به بعد همه‌چیز خودکار است.</div>'
+      +'<div class="form-row" style="margin-top:.75rem"><button class="btn btn-default btn-sm" data-act="cloud-create">'+icon('bolt')+'ساخت فروشگاه ابری و فعال‌سازی</button></div>'
+      +'<div class="form-grid cols-2" style="margin-top:.75rem">'
+      +'<div class="field"><label class="label">یا اتصال با کد / لینک ابری موجود</label><input class="input ltr" id="cloudCode" placeholder="jsn:... یا jbl:..."></div>'
+      +'<div class="field"><label class="label">&nbsp;</label><button class="btn btn-outline btn-sm" data-act="cloud-connect">'+icon('link')+'اتصال با این کد</button></div>'
+      +'</div>';
+  }
+  h+='</div></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('link')+'لینک به‌روزرسانی آفلاین (روش جایگزین)</div></div><div class="card-content pt0">'
+    +'<div class="sync-box">اگر سرویس‌های ابری در شبکه مدرسه در دسترس نبودند، از این روش استفاده کنید: لینک را در کانال بفرستید؛ هرکس روی آن بزند داده‌های جدید در مرورگرش ذخیره می‌شود.</div>'
+    +'<div class="form-row" style="margin-top:.75rem">'
+    +'<button class="btn btn-outline btn-sm" data-act="gen-link">'+icon('link')+'ساخت لینک</button>'
+    +'<button class="btn btn-outline btn-sm" data-act="copy-link">'+icon('share')+'کپی لینک</button></div>'
+    +'<div class="form-row" style="margin-top:.5rem"'+(adminUI.linkOut?'':' hidden')+'><input class="input ltr" readonly value="'+esc(adminUI.linkOut)+'"></div>'
+    +'</div></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('upload')+'دریافت به‌روزرسانی</div></div><div class="card-content pt0">'
+    +'<div class="field"><label class="label">لینک یا کد دریافتی را اینجا بچسبانید</label><textarea class="input ltr" id="importCode" placeholder="#cloud=... یا #upd=..."></textarea></div>'
+    +'<div class="form-row" style="margin-top:.5rem"><button class="btn btn-outline btn-sm" data-act="import-code">'+icon('download')+'اعمال به‌روزرسانی</button></div>'
+    +'</div></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title">'+icon('save')+'پشتیبان‌گیری</div></div><div class="card-content pt0"><div class="form-row">'
+    +'<button class="btn btn-outline btn-sm" data-act="export">'+icon('download')+'دانلود فایل پشتیبان</button>'
+    +'<button class="btn btn-outline btn-sm" data-act="import-file">'+icon('upload')+'بازیابی از فایل</button>'
+    +'<input type="file" id="importFile" accept=".json" hidden>'
+    +'</div></div></div>';
+  h+='<div class="card"><div class="card-header"><div class="card-title" style="color:var(--destructive)">'+icon('warn')+'ناحیه خطر</div></div><div class="card-content pt0"><div class="form-row">'
+    +'<button class="btn btn-destructive-o btn-sm" data-act="reset-seed">'+icon('refresh')+'بازنشانی به داده نمونه</button>'
+    +'<button class="btn btn-destructive-o btn-sm" data-act="wipe">'+icon('trash')+'حذف کامل داده‌ها</button>'
+    +'</div></div></div>';
+  h+='<div class="counts-line"><span>حجم داده محلی: <b>'+toFa(size)+' کیلوبایت</b></span><span>آخرین به‌روزرسانی: <b>'+fmtUpdated(state.meta.updated)+'</b></span><span>نسخه قالب داده: <b>'+toFa(state.v)+'</b></span></div>';
+  return h;}
+function tabSettings(){
+  const s=state.settings;
+  return '<div class="ad-h"><div><h2>تنظیمات سایت</h2><p>اطلاعات عمومی و ظاهری لیگ</p></div></div>'
+    +'<div class="card"><div class="card-header"><div class="card-title">'+icon('sliders')+'اطلاعات عمومی</div></div><div class="card-content pt0">'
+    +'<div class="form-grid cols-2">'
+    +'<div class="field"><label class="label">عنوان فصل</label><input class="input" id="sSeason" value="'+esc(s.season)+'"></div>'
+    +'<div class="field"><label class="label">نام مدرسه</label><input class="input" id="sSchool" value="'+esc(s.schoolName)+'"></div>'
+    +'<div class="field"><label class="label">برگزارکننده</label><input class="input" id="sOrg" value="'+esc(s.organizer)+'"></div>'
+    +'<div class="field"><label class="label">سرعت تیکر (ثانیه)</label><input class="input" id="sTicker" type="number" min="15" max="120" value="'+s.tickerSpeed+'"></div>'
+    +'</div><div class="form-row" style="margin-top:.75rem"><button class="btn btn-default btn-sm" data-act="save-settings">'+icon('check')+'ذخیره تنظیمات</button></div>'
+    +'</div></div>'
+    +'<div class="card"><div class="card-header"><div class="card-title">'+icon('lock')+'تغییر رمز ورود</div></div><div class="card-content pt0">'
+    +'<div class="form-grid cols-2">'
+    +'<div class="field"><label class="label">رمز فعلی</label><input class="input ltr" type="password" id="sPwOld"></div>'
+    +'<div class="field"><label class="label">رمز جدید</label><input class="input ltr" type="password" id="sPwNew"></div>'
+    +'</div><div class="form-row" style="margin-top:.75rem"><button class="btn btn-outline btn-sm" data-act="change-pw">'+icon('key')+'تغییر رمز</button></div>'
+    +'</div></div>';}
+
+/* ═════════════ ۱۵) چت دستیار ═════════════ */
+let chatMsgs=[];
+function loadChat(){try{const raw=localStorage.getItem(CHAT_KEY);if(raw)chatMsgs=JSON.parse(raw)||[];}catch(e){chatMsgs=[];}
+  if(!chatMsgs.length){chatMsgs.push({role:'ai',
+    html:'سلام مدیر محترم! من دستیار مدیریت لیگ هستم و کل سایت را از همین‌جا کنترل می‌کنم.<br>کافی است نتایج، برنامه بازی‌ها یا آمار بازیکنان را به زبان معمولی بنویسید؛ جدول، رتبه‌بندی‌ها، تیکر و شمارش معکوس همه خودکار ساخته می‌شوند.<br>برای دیدن نمونه جمله‌ها بنویسید: <b>راهنما</b>',t:Date.now()});}}
+function saveChat(){try{localStorage.setItem(CHAT_KEY,JSON.stringify(chatMsgs.slice(-200)));}catch(e){}}
+function tabChat(){
+  return '<div class="chat-wrap">'
+    +'<div class="chat-head"><div class="av">'+icon('sparkle')+'</div>'
+    +'<div><div class="nm">دستیار مدیریت لیگ</div><div class="on">آنلاین — پردازش هوشمند زبان فارسی</div></div>'
+    +'<span class="sp"></span><button class="btn btn-xs btn-outline" data-act="clear-chat">'+icon('refresh')+'پاک کردن</button></div>'
+    +'<div class="chat-body" id="chatBody"></div>'
+    +'<div class="chat-chips">'
+    +'<button data-fill="نتیجه زنگ اول: آذرخش ۵۸ - ۵۰ طوفان&#10;آرمان رضایی ۲۱ امتیاز ۸ ریباند ۴ پاس&#10;علی احمدی ۲۲ امتیاز ۵ ریباند ۷ پاس">+ ثبت نتیجه با آمار</button>'
+    +'<button data-fill="فردا ساعت ۹:۴۵ زنگ اول، شهاب مقابل عقاب">+ بازی برنامه‌ای</button>'
+    +'<button data-fill="خبر: دیدار هفته آینده در زنگ تفریح دوم برگزار می‌شود">+ خبر تیکر</button>'
+    +'<button data-fill="تیم‌ها: اژدها، شبح">+ افزودن تیم</button>'
+    +'<button data-fill="بازیکن: رضا احمدی، طوفان، شماره ۹">+ افزودن بازیکن</button>'
+    +'<button data-send="راهنما">راهنمای کامل</button>'
+    +'</div>'
+    +'<div class="chat-in"><textarea id="chatInput" placeholder="نتایج یا دستورات را اینجا بنویسید... (Enter ارسال، Shift+Enter خط جدید)"></textarea>'
+    +'<button class="chat-send" data-act="chat-send" title="ارسال">'+icon('send')+'</button>'
+    +'</div></div>';}
+function mountChat(){renderChatBody();
+  const input=document.getElementById('chatInput');if(!input)return;
+  input.addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendChat(input.value);}});}
+function renderChatBody(){
+  const body=document.getElementById('chatBody');if(!body)return;
+  body.innerHTML=chatMsgs.map(m=>'<div class="msg '+m.role+'"><div class="who">'+(m.role==='ai'?'دستیار':'شما')+'</div><div class="bbl">'+m.html+'</div></div>').join('');
+  body.scrollTop=body.scrollHeight;}
+function sendChat(text){
+  text=(text||'').trim();if(!text)return;
+  const input=document.getElementById('chatInput');if(input)input.value='';
+  chatMsgs.push({role:'user',html:esc(text).replace(/\n/g,'<br>'),t:Date.now()});
+  renderChatBody();saveChat();
+  const body=document.getElementById('chatBody');
+  const tp=document.createElement('div');tp.className='msg ai';
+  tp.innerHTML='<div class="who">دستیار</div><div class="bbl"><span class="typing"><i></i><i></i><i></i></span></div>';
+  body.appendChild(tp);body.scrollTop=body.scrollHeight;
+  setTimeout(()=>{
+    const reply=Engine.handle(text);
+    if(tp.parentNode)tp.remove();
+    chatMsgs.push({role:'ai',html:reply,t:Date.now()});
+    renderChatBody();saveChat();renderAdminSide();
+  },550+Math.random()*400);}
+
+/* ═════════════ ۱۶) رویدادهای پنل ═════════════ */
+function armConfirm(key){adminUI.confirmDel=key;
+  setTimeout(()=>{if(adminUI.confirmDel===key){adminUI.confirmDel=null;if(adminOpen&&adminUI.tab!=='chat')renderAdminTab();}},3500);}
+function onAdminClick(e){
+  const fillBtn=e.target.closest('[data-fill]');
+  const sendBtn=e.target.closest('[data-send]');
+  if(fillBtn){const inp=document.getElementById('chatInput');if(inp){inp.value=fillBtn.dataset.fill;inp.focus();}return;}
+  if(sendBtn){sendChat(sendBtn.dataset.send);return;}
+  const btn=e.target.closest('[data-act]');if(!btn)return;
+  const act=btn.dataset.act,id=btn.dataset.id;
+  switch(act){
+    case 'tab':adminUI.tab=btn.dataset.tab;renderAdminTab();break;
+    case 'view-site':closeAdmin();toast('نمای سایت — برای بازگشت، آیکون کلید بالای صفحه را بزنید');break;
+    case 'logout':logout();break;
+    case 'go-chat':adminUI.tab='chat';renderAdminTab();break;
+    case 'go-games':adminUI.tab='games';renderAdminTab();break;
+    case 'go-cloud':adminUI.tab='data';renderAdminTab();break;
+    case 'chat-send':{const inp=document.getElementById('chatInput');sendChat(inp?inp.value:'');break;}
+    case 'clear-chat':chatMsgs=[];saveChat();loadChat();renderAdminTab();break;
+    case 'toggle-new-team':adminUI.newGameOpen=adminUI.newGameOpen==='team'?false:'team';renderAdminTab();break;
+    case 'add-team':{const name=document.getElementById('ntName').value.trim();
+      const short=document.getElementById('ntShort').value.trim()||name.slice(0,2);
+      const color=document.getElementById('ntColor').value;
+      if(name.length<2){toast('نام تیم را وارد کنید','destructive');break;}
+      state.teams.push(mkTeam(uid('t'),name,short,color));
+      adminUI.newGameOpen=false;commit(true);renderAdminTab();toast('تیم «'+esc(name)+'» اضافه شد');break;}
+    case 'edit-team':adminUI.editingTeam=id;renderAdminTab();break;
+    case 'cancel-team':adminUI.editingTeam=null;renderAdminTab();break;
+    case 'save-team':{const box=document.querySelector('[data-team="'+id+'"]');const t=teamById(id);
+      if(box&&t){t.name=box.querySelector('.e-t-name').value.trim()||t.name;
+        t.short=box.querySelector('.e-t-short').value.trim()||t.short;
+        t.color=box.querySelector('.e-t-color').value;
+        adminUI.editingTeam=null;commit(true);renderAdminTab();toast('تیم به‌روزرسانی شد');}break;}
+    case 'del-team':{const key='team:'+id;
+      if(adminUI.confirmDel!==key){armConfirm(key);renderAdminTab();toast('برای حذف قطعی، دوباره روی همان دکمه بزنید','destructive');break;}
+      adminUI.confirmDel=null;
+      state.teams=state.teams.filter(t=>t.id!==id);
+      state.players=state.players.filter(p=>p.teamId!==id);
+      state.games=state.games.filter(g=>g.homeId!==id&&g.awayId!==id);
+      commit(true);renderAdminTab();toast('تیم و بازی‌های مرتبط حذف شد');break;}
+    case 'add-player':{const name=document.getElementById('npName').value.trim();
+      const teamId=document.getElementById('npTeam').value;
+      const num=+document.getElementById('npNum').value||0;
+      const pos=document.getElementById('npPos').value;
+      if(name.length<3){toast('نام کامل بازیکن را وارد کنید','destructive');break;}
+      state.players.push(mkP(uid('p'),name,teamId,num,pos));
+      commit(true);renderAdminTab();toast('بازیکن ثبت شد');break;}
+    case 'del-player':{const key='player:'+id;
+      if(adminUI.confirmDel!==key){armConfirm(key);renderAdminTab();toast('برای حذف قطعی، دوباره روی همان دکمه بزنید','destructive');break;}
+      adminUI.confirmDel=null;
+      state.players=state.players.filter(p=>p.id!==id);
+      state.games.forEach(g=>{g.stats=(g.stats||[]).filter(s=>s.playerId!==id);});
+      commit(true);renderAdminTab();toast('بازیکن حذف شد');break;}
+    case 'toggle-new-game':adminUI.newGameOpen=!adminUI.newGameOpen;renderAdminTab();break;
+    case 'save-new-game':{
+      const hId=document.getElementById('ngHome').value;
+      const aId=document.getElementById('ngAway').value;
+      const date=document.getElementById('ngDate').value;
+      const time=document.getElementById('ngTime').value||'09:45';
+      const recess=document.getElementById('ngRecess').value;
+      if(hId===aId){toast('میزبان و مهمان نمی‌توانند یکی باشند','destructive');break;}
+      if(!date){toast('تاریخ بازی را مشخص کنید','destructive');break;}
+      state.games.push({id:uid('g'),date,time,recess,homeId:hId,awayId:aId,homeScore:null,awayScore:null,status:'scheduled',stats:[]});
+      adminUI.newGameOpen=false;commit(true);renderAdminTab();toast('بازی در برنامه ثبت شد');break;}
+    case 'open-result':adminUI.resultFor=adminUI.resultFor===id?null:id;renderAdminTab();break;
+    case 'close-result':adminUI.resultFor=null;renderAdminTab();break;
+    case 'save-result':{
+      const g=state.games.find(x=>x.id===id);if(!g)break;
+      const hv=document.getElementById('reHome').value;
+      const av=document.getElementById('reAway').value;
+      const hs=+hv,as=+av;
+      if(hv===''||av===''||!(hs>=0)||!(as>=0)){toast('امتیاز هر دو تیم را وارد کنید','destructive');break;}
+      if(hs===as){toast('مساوی در بسکتبال ممکن نیست','destructive');break;}
+      g.homeScore=hs;g.awayScore=as;g.status='finished';g.stats=[];
+      document.querySelectorAll('.ste').forEach(inp=>{
+        const v=+inp.value||0;if(v>0){
+          const ex=g.stats.find(s=>s.playerId===inp.dataset.pid);
+          if(ex)ex[inp.dataset.k]=v;
+          else{const row={playerId:inp.dataset.pid,pts:0,reb:0,ast:0};row[inp.dataset.k]=v;g.stats.push(row);}}});
+      adminUI.resultFor=null;commit(true);renderAdminTab();
+      toast('نتیجه ثبت شد؛ جدول و رتبه‌بندی‌ها به‌روزرسانی شدند');break;}
+    case 'del-game':{const key='game:'+id;
+      if(adminUI.confirmDel!==key){armConfirm(key);renderAdminTab();toast('برای حذف قطعی، دوباره روی همان دکمه بزنید','destructive');break;}
+      adminUI.confirmDel=null;
+      state.games=state.games.filter(g=>g.id!==id);
+      commit(true);renderAdminTab();toast('بازی حذف شد');break;}
+    case 'add-news':{const txt=document.getElementById('newsText').value.trim();
+      if(txt.length<5){toast('متن خبر را کامل وارد کنید','destructive');break;}
+      state.news.push({id:uid('n'),text:txt,date:todayStr()});
+      commit(true);renderAdminTab();toast('خبر به تیکر اضافه شد');break;}
+    case 'del-news':{const key='news:'+id;
+      if(adminUI.confirmDel!==key){armConfirm(key);renderAdminTab();toast('برای حذف قطعی، دوباره روی همان دکمه بزنید','destructive');break;}
+      adminUI.confirmDel=null;
+      state.news=state.news.filter(n=>n.id!==id);
+      commit(true);renderAdminTab();toast('خبر حذف شد');break;}
+    case 'cloud-create':
+      toast('در حال ساخت فروشگاه ابری…');
+      Cloud.createStore().then(cfg=>{renderAdminTab();
+        if(cfg)toast('حالت آنلاین فعال شد! لینک اتصال را یک‌بار در کانال مدرسه بفرستید');
+        else toast('ساخت فروشگاه ابری ناموفق بود','destructive');});
+      break;
+    case 'cloud-connect':{const v=((document.getElementById('cloudCode')||{}).value)||'';
+      if(!v.trim()){toast('کد ابری را وارد کنید','destructive');break;}
+      toast('در حال اتصال به سرور ابری…');
+      Cloud.connect(v,false).then(ok=>{renderAdminTab();if(ok)toast('به سرور ابری متصل شد');});break;}
+    case 'cloud-off':Cloud.disconnect();renderAdminTab();toast('حالت آنلاین قطع شد');break;
+    case 'cloud-push':Cloud.push().then(()=>{renderAdminTab();
+      toast(Cloud.status==='live'?'داده‌ها روی سرور ابری ذخیره شد':'ارسال ناموفق بود',Cloud.status==='live'?'':'destructive');});break;
+    case 'cloud-pull':Cloud.pull(true).then(()=>{renderAdminTab();toast('بررسی سرور ابری انجام شد');});break;
+    case 'cloud-copy':if(!Cloud.cfg){toast('ابتدا حالت آنلاین را فعال کنید','destructive');break;}
+      copyText(buildConnectLink(),'لینک اتصال کپی شد — در کانال مدرسه بفرستید');break;
+    case 'gen-link':adminUI.linkOut=buildUpdateLink();renderAdminTab();toast('لینک به‌روزرسانی ساخته شد');break;
+    case 'copy-link':if(!adminUI.linkOut)adminUI.linkOut=buildUpdateLink();
+      copyText(adminUI.linkOut,'لینک به‌روزرسانی کپی شد');break;
+    case 'import-code':{
+      const raw=((document.getElementById('importCode')||{}).value||'').trim();
+      if(!raw){toast('کد یا لینک را وارد کنید','destructive');break;}
+      const ci=raw.indexOf('#cloud=');
+      if(ci!==-1){const cfg=Cloud.parseCode(raw.slice(ci));
+        if(cfg){Cloud.connect(cfg,false).then(ok=>{renderAdminTab();if(ok)toast('حالت آنلاین فعال شد');});break;}
+        toast('کد ابری معتبر نیست','destructive');break;}
+      let payload=raw;const i=raw.indexOf('#upd=');
+      if(i!==-1)payload=raw.slice(i+5);
+      const obj=decodeUpdate(payload);
+      if(!obj){toast('کد یا لینک واردشده معتبر نیست','destructive');break;}
+      preUpdateBackup=JSON.parse(JSON.stringify(state));
+      state=obj;stateIsSeed=false;commit(true);renderAdminTab();
+      toast('اطلاعات از کد دریافتی به‌روزرسانی شد');break;}
+    case 'export':{const blob=new Blob([JSON.stringify(state,null,2)],{type:'application/json'});
+      const a=document.createElement('a');a.href=URL.createObjectURL(blob);
+      a.download='league-backup-'+todayStr()+'.json';a.click();URL.revokeObjectURL(a.href);
+      toast('فایل پشتیبان دانلود شد');break;}
+    case 'import-file':{const inp=document.getElementById('importFile');if(inp)inp.click();break;}
+    case 'reset-seed':
+      if(adminUI.confirmDel!=='reset'){armConfirm('reset');renderAdminTab();toast('برای بازنشانی، دوباره روی همان دکمه بزنید','destructive');break;}
+      adminUI.confirmDel=null;state=buildSeed();commit(true);renderAdminTab();toast('داده‌های نمونه بازیابی شدند');break;
+    case 'wipe':
+      if(adminUI.confirmDel!=='wipe'){armConfirm('wipe');renderAdminTab();toast('برای حذف کامل، دوباره روی همان دکمه بزنید','destructive');break;}
+      adminUI.confirmDel=null;
+      state.teams=[];state.players=[];state.games=[];state.news=[];
+      commit(true);renderAdminTab();toast('همه داده‌ها حذف شدند');break;
+    case 'save-settings':{
+      const s=state.settings;
+      s.season=document.getElementById('sSeason').value.trim()||s.season;
+      s.schoolName=document.getElementById('sSchool').value.trim()||s.schoolName;
+      s.organizer=document.getElementById('sOrg').value.trim()||s.organizer;
+      const tk=+document.getElementById('sTicker').value;
+      if(tk>=15&&tk<=120)s.tickerSpeed=tk;
+      commit(true);toast('تنظیمات ذخیره شد');break;}
+    case 'change-pw':{
+      const old=document.getElementById('sPwOld').value.trim();
+      const nw=document.getElementById('sPwNew').value.trim();
+      if(old!==state.settings.password){toast('رمز فعلی درست نیست','destructive');break;}
+      if(nw.length<6){toast('رمز جدید باید حداقل ۶ رقم باشد','destructive');break;}
+      state.settings.password=nw;commit(true);toast('رمز ورود تغییر کرد');break;}
+  }}
+function onAdminChange(e){
+  if(e.target.id==='autoNewsChk'){
+    state.settings.showAutoNews=e.target.checked;
+    commit(true);
+    toast(e.target.checked?'اخبار خودکار تیکر فعال شد':'اخبار خودکار تیکر غیرفعال شد');return;}
+  if(e.target.id==='importFile'&&e.target.files&&e.target.files[0]){
+    const f=e.target.files[0];const rd=new FileReader();
+    rd.onload=()=>{try{const obj=JSON.parse(rd.result);
+      if(!obj.teams||!obj.games)throw new Error('bad');
+      state=obj;stateIsSeed=false;commit(true);renderAdminTab();toast('پشتیبان با موفقیت بازیابی شد');}
+      catch(err){toast('فایل پشتیبان معتبر نیست','destructive');}};
+    rd.readAsText(f);}}
+
+/* ═════════════ ۱۷) رویدادهای عمومی ═════════════ */
+function bindGlobalEvents(){
+  document.getElementById('shareBtn').innerHTML=icon('share');
+  document.getElementById('printBtn').innerHTML=icon('printer');
+  document.getElementById('adminTrigger').innerHTML=icon('key');
+  document.getElementById('loginClose').innerHTML=icon('x');
+  document.getElementById('loginTitle').innerHTML=icon('lock')+'ورود به پنل مدیریت لیگ';
+  document.getElementById('loginSubmit').innerHTML=icon('arrow')+'ورود به پنل';
+  document.getElementById('viewSiteBtn').innerHTML=icon('eye')+'مشاهده سایت';
+  document.getElementById('logoutBtn').innerHTML=icon('lock')+'خروج از پنل';
+  document.getElementById('adminTrigger').addEventListener('click',()=>{if(isAuthed())openAdmin();else openLogin();});
+  document.getElementById('loginClose').addEventListener('click',closeLogin);
+  document.getElementById('loginCancel').addEventListener('click',closeLogin);
+  document.getElementById('loginOverlay').addEventListener('click',closeLogin);
+  document.getElementById('loginForm').addEventListener('submit',e=>{e.preventDefault();tryLogin();});
+  document.addEventListener('keydown',e=>{
+    if(e.key==='Escape'){if(!document.getElementById('loginDialog').hidden)closeLogin();else if(adminOpen&&e.ctrlKey)closeAdmin();}
+    if(e.ctrlKey&&e.shiftKey&&(e.key==='A'||e.key==='ا')){e.preventDefault();if(isAuthed())openAdmin();else openLogin();}});
+  document.getElementById('shareBtn').addEventListener('click',()=>copyText(location.href.split('#')[0],'آدرس سایت برای اشتراک‌گذاری کپی شد'));
+  document.getElementById('printBtn').addEventListener('click',()=>window.print());
+  document.getElementById('mainTabs').addEventListener('click',e=>{
+    const b=e.target.closest('.tabs-trigger');if(b)switchTab(b.dataset.tab);});
+  document.getElementById('adminMain').addEventListener('click',onAdminClick);
+  document.getElementById('adminMain').addEventListener('change',onAdminChange);
+  document.getElementById('adSide').addEventListener('click',onAdminClick);
+  document.querySelector('.admin-top').addEventListener('click',onAdminClick);
+  tickClock();setInterval(tickClock,1000);}
+
+/* ═════════════ ۱۸) راه‌اندازی ═════════════ */
+function init(){
+  state=loadState();
+  loadChat();
+  bindGlobalEvents();
+  renderTabs();
+  if(isAuthed()){document.getElementById('adminTrigger').classList.add('authed');openAdmin();}
+  renderAll();
+  if(!checkHashCloud())checkHashUpdate();
+  initCloud();
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden&&Cloud.cfg)Cloud.pull(true);});
+  window.addEventListener('focus',()=>{if(Cloud.cfg)Cloud.pull(true);});
+  setInterval(()=>{if(cdTimer===null)scheduleCountdown();},30000);}
+try{init();}catch(e){
+  try{document.querySelectorAll('section[data-page]').forEach(s=>{s.hidden=s.dataset.page!=='home';});
+    if(window.console&&console.error)console.error('[init]',e);}catch(_){}}
+
+})();
+</script>
+</body>
+</html>
